@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <style>
+    .rule { stroke: #191b19; }
+    .sun { fill: #b23b1e; }
+    @media (prefers-color-scheme: dark) {
+      .rule { stroke: #e8e5dd; }
+      .sun { fill: #e86a38; }
+    }
+  </style>
+  <path class="sun" d="M8 19A8 8 0 0 1 24 19Z"/>
+  <path class="rule" d="M3.5 19H28.5" stroke-width="3" stroke-linecap="round"/>
+</svg>

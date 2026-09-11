@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" fill="none" role="img" aria-label="Horizon">
+  <title>Horizon</title>
+  <desc>Horizontal Horizon logo: a baseline rising into a growth arc with a red peak, beside an elegant serif wordmark.</desc>
+
+  <path d="M70 205 C180 205 260 205 335 185 C405 166 458 132 500 82"
+        stroke="#191B19" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="505" cy="76" r="14" fill="#B23B1E"/>
+
+  <text x="570" y="188" fill="#191B19"
+        font-family="Newsreader, Spectral, Georgia, 'Times New Roman', serif"
+        font-size="104" font-weight="400" letter-spacing="-1.5">Horizon</text>
+</svg>

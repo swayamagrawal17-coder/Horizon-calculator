@@ -12,7 +12,7 @@ import { useCalculatorState } from "@/hooks/useCalculatorState";
 import type { Schema } from "@/lib/urlState";
 import { futureValue, futureValueSeries, toPeriodParams } from "@/lib/finance";
 import { formatINR, formatPercent } from "@/lib/format";
-import { downloadCsv, toCsv } from "@/lib/csv";
+import { exportCsv } from "@/lib/csv";
 import { exportPdf } from "@/lib/pdf";
 
 const schema = {
@@ -62,25 +62,60 @@ export default function FutureValuePage() {
   const point = series.find((d) => d.year >= scrub - 1e-9) ?? series[series.length - 1];
 
   const csv = () =>
-    downloadCsv(
-      "future-value-projection",
-      toCsv(
-        ["Year", "Invested", "Growth", "Projected value"],
-        series.slice(1).map((r) => [
+    exportCsv({
+      filename: "future-value-projection",
+      title: "Future Value Report",
+      meta: [
+        ["Amount today", values.pv],
+        ["Added each period", values.pmt],
+        ["Compounding", freqLabel],
+        ["Expected return (% p.a.)", values.ratePct],
+        ["Time (years)", values.years],
+        ["Contribution timing", timing === "begin" ? "Start of period" : "End of period"],
+        ["Future value", Math.round(result.fv)],
+        ["Total invested", Math.round(result.totalContributions)],
+        ["Estimated growth", Math.round(result.totalGrowth)],
+        ["Periods", periods],
+        ["Share link", shareUrl()],
+      ],
+      table: {
+        head: ["Year", "Invested", "Growth", "Projected value"],
+        body: series.slice(1).map((r) => [
           r.year,
           Math.round(r.invested),
           Math.round(r.growth),
           Math.round(r.value),
         ]),
-      ),
-    );
+      },
+    });
 
   const pdf = () =>
     exportPdf({
       filename: "future-value",
-      heading: "Future value projection",
-      subheading: `${formatINR(values.pv)} today plus ${formatINR(values.pmt)} ${perLabel} at ${formatPercent(values.ratePct)} p.a. for ${values.years} years`,
-      sections: [
+      eyebrow: "Savings · compound growth",
+      title: "Future Value Report",
+      meta: [`${formatINR(values.pv)} today plus ${formatINR(values.pmt)} ${perLabel} at ${formatPercent(values.ratePct)} p.a. for ${values.years} years`],
+      hero: {
+        label: `Future value in ${values.years} years`,
+        value: formatINR(result.fv),
+        note: `${formatINR(result.totalContributions)} invested · ${formatINR(result.totalGrowth)} growth`,
+      },
+      chart: {
+        title: "Projected value",
+        xLabel: "years",
+        xValues: series.map((p) => p.year),
+        series: [
+          { key: "invested", label: "Invested", tone: "mine", kind: "area", values: series.map((p) => p.invested) },
+          { key: "growth", label: "Growth", tone: "accent", kind: "area", stackWith: "invested", values: series.map((p) => p.growth) },
+        ],
+      },
+      splitBar: {
+        mineLabel: "Invested",
+        mineValue: result.totalContributions,
+        costLabel: "Growth",
+        costValue: result.totalGrowth,
+      },
+      metrics: [
         {
           title: "Result",
           rows: [
@@ -89,6 +124,7 @@ export default function FutureValuePage() {
             ["Estimated growth", formatINR(result.totalGrowth)],
             ["Compounding", freqLabel],
             ["Contribution timing", timing === "begin" ? "Start of period" : "End of period"],
+            ["Periods", `${periods} · ${perLabel}`],
           ],
         },
       ],
@@ -102,6 +138,7 @@ export default function FutureValuePage() {
           formatINR(r.value),
         ]),
       },
+      shareUrl: shareUrl(),
     });
 
   return (

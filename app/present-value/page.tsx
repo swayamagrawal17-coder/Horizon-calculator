@@ -12,7 +12,7 @@ import { useCalculatorState } from "@/hooks/useCalculatorState";
 import type { Schema } from "@/lib/urlState";
 import { presentValue, presentValueSeries, toPeriodParams } from "@/lib/finance";
 import { formatINR, formatPercent } from "@/lib/format";
-import { downloadCsv, toCsv } from "@/lib/csv";
+import { exportCsv } from "@/lib/csv";
 import { exportPdf } from "@/lib/pdf";
 
 const schema = {
@@ -61,20 +61,54 @@ export default function PresentValuePage() {
   const point = series.find((d) => d.year >= scrub - 1e-9) ?? series[series.length - 1];
 
   const csv = () =>
-    downloadCsv(
-      "present-value",
-      toCsv(
-        ["Received in year", "Worth today"],
-        series.map((r) => [r.year, Math.round(r.worthToday)]),
-      ),
-    );
+    exportCsv({
+      filename: "present-value",
+      title: "Present Value Report",
+      meta: [
+        ["Amount due later", values.fv],
+        ["Recurring future payment", values.pmt],
+        ["Compounding", freqLabel],
+        ["Discount rate (% p.a.)", values.ratePct],
+        ["Time until due (years)", values.years],
+        ["Payment timing", timing === "begin" ? "Start of period" : "End of period"],
+        ["Present value", Math.round(result.pv)],
+        ["Nominal total", Math.round(result.nominalTotal)],
+        ["Discount", Math.round(result.discountAmount)],
+        ["Periods", periods],
+        ["Share link", shareUrl()],
+      ],
+      table: {
+        head: ["Received in year", "Worth today"],
+        body: series.map((r) => [r.year, Math.round(r.worthToday)]),
+      },
+    });
 
   const pdf = () =>
     exportPdf({
       filename: "present-value",
-      heading: "Present value",
-      subheading: `${formatINR(values.fv)} plus ${formatINR(values.pmt)} ${perLabel} discounted at ${formatPercent(values.ratePct)} p.a. over ${values.years} years`,
-      sections: [
+      eyebrow: "Discount · time value",
+      title: "Present Value Report",
+      meta: [`${formatINR(values.fv)} plus ${formatINR(values.pmt)} ${perLabel} discounted at ${formatPercent(values.ratePct)} p.a. over ${values.years} years`],
+      hero: {
+        label: "Present value",
+        value: formatINR(result.pv),
+        note: `${formatINR(result.nominalTotal)} nominal · ${formatINR(result.discountAmount)} lost to waiting`,
+      },
+      chart: {
+        title: "Worth today, by delay",
+        xLabel: "years of delay",
+        xValues: series.map((p) => p.year),
+        series: [
+          { key: "worthToday", label: "Value in today's money", tone: "mine", kind: "area", values: series.map((p) => p.worthToday) },
+        ],
+      },
+      splitBar: {
+        mineLabel: "Present value",
+        mineValue: result.pv,
+        costLabel: "Discount",
+        costValue: result.discountAmount,
+      },
+      metrics: [
         {
           title: "Result",
           rows: [
@@ -83,9 +117,16 @@ export default function PresentValuePage() {
             ["Discount", formatINR(result.discountAmount)],
             ["Compounding", freqLabel],
             ["Payment timing", timing === "begin" ? "Start of period" : "End of period"],
+            ["Periods", `${periods} · ${perLabel}`],
           ],
         },
       ],
+      table: {
+        title: "Worth today, by delay",
+        head: ["Received in year", "Worth today"],
+        body: series.map((r) => [r.year, formatINR(r.worthToday)]),
+      },
+      shareUrl: shareUrl(),
     });
 
   return (

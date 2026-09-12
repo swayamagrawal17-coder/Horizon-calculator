@@ -18,7 +18,7 @@ import {
   type AmortRow,
 } from "@/lib/finance";
 import { formatINR, formatPercent, formatTenure } from "@/lib/format";
-import { downloadCsv, toCsv } from "@/lib/csv";
+import { exportCsv } from "@/lib/csv";
 import { exportPdf } from "@/lib/pdf";
 
 const schema = {
@@ -91,26 +91,77 @@ export default function EmiPage() {
       };
 
   const csv = () =>
-    downloadCsv(
-      "emi-schedule",
-      toCsv(
-        ["Month", "EMI", "Principal", "Interest", "Balance"],
-        schedule.map((r) => [
+    exportCsv({
+      filename: "emi-schedule",
+      title: comparison ? "Step-up EMI Report" : "Loan EMI Report",
+      meta: [
+        ["Loan amount", principal],
+        ["Interest rate (% p.a.)", ratePct],
+        ["Tenure (months)", months],
+        ...(comparison
+          ? ([
+              ["Starting monthly EMI", Math.round(comparison.stepUp.firstEmi)],
+              ["Final monthly EMI", Math.round(comparison.stepUp.lastEmi)],
+              ["Step-up (%)", values.stepUpPct],
+              ["Step every (months)", values.stepEvery],
+            ] as const)
+          : ([["Monthly EMI", Math.round(standardEmi)]] as const)),
+        ["Principal", principal],
+        ["Total interest", Math.round(totals.interest)],
+        ["Total payable", Math.round(totals.payment)],
+        ["Effective tenure", totals.tenure],
+        ...(comparison
+          ? ([
+              ["Standard EMI", Math.round(comparison.standard.emi)],
+              ["Standard total interest", Math.round(comparison.standard.totalInterest)],
+              ["Months saved", Math.max(0, comparison.monthsSaved)],
+              ["Interest saved", Math.max(0, Math.round(comparison.interestSaved))],
+            ] as const)
+          : []),
+        ["Share link", shareUrl()],
+      ],
+      table: {
+        head: ["Month", "EMI", "Principal", "Interest", "Balance"],
+        body: schedule.map((r) => [
           r.period,
           Math.round(r.emi),
           Math.round(r.principalPaid),
           Math.round(r.interestPaid),
           Math.round(r.balance),
         ]),
-      ),
-    );
+      },
+    });
 
   const pdf = () =>
     exportPdf({
       filename: "emi-summary",
-      heading: comparison ? "Step-up EMI plan" : "Loan EMI summary",
-      subheading: `${formatINR(principal)} at ${formatPercent(ratePct)} p.a. for ${formatTenure(months)}`,
-      sections: [
+      eyebrow: "Loan · reducing balance",
+      title: comparison ? "Step-up EMI Report" : "Loan EMI Report",
+      meta: [`${formatINR(principal)} at ${formatPercent(ratePct)} p.a. for ${formatTenure(months)}`],
+      hero: {
+        label: comparison ? "Starting monthly EMI" : "Monthly EMI",
+        value: totals.heroValue,
+        note: totals.heroNote,
+      },
+      chart: {
+        title: "Outstanding balance",
+        xLabel: "years",
+        xValues: series.map((p) => p.year),
+        series: [
+          { key: "balance", label: "Outstanding balance", tone: "mine", kind: "area", values: series.map((p) => p.balance) },
+          { key: "interestPaid", label: "Interest paid so far", tone: "accent", kind: "line", values: series.map((p) => p.interestPaid) },
+        ],
+      },
+      splitBar: {
+        mineLabel: "Principal",
+        mineValue: principal,
+        costLabel: "Interest",
+        costValue: totals.interest,
+      },
+      callout: comparison?.stepUp.underpaid
+        ? "The starting EMI doesn't cover the first month's interest, so the balance grows until the step-ups catch up."
+        : undefined,
+      metrics: [
         {
           title: "Plan",
           rows: [
@@ -146,6 +197,7 @@ export default function EmiPage() {
           formatINR(r.balance),
         ]),
       },
+      shareUrl: shareUrl(),
     });
 
   return (

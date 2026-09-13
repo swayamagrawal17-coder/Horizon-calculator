@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useRef } from "react";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "ink" | "outline" | "ghost";
@@ -30,23 +30,45 @@ export function SegmentedControl<T extends string>({
   onChange: (v: T) => void;
   label: string;
 }) {
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const move = (fromIndex: number, delta: number) => {
+    const nextIndex = (fromIndex + delta + options.length) % options.length;
+    onChange(options[nextIndex].value);
+    buttonRefs.current[nextIndex]?.focus();
+  };
+
   return (
     <div role="radiogroup" aria-label={label} className="flex">
-      {options.map((opt) => (
-        <button
-          key={opt.value}
-          role="radio"
-          aria-checked={value === opt.value}
-          onClick={() => onChange(opt.value)}
-          className={`focusable min-h-[34px] border-y border-r border-rule-strong px-2.5 py-1 font-mono text-[0.72rem] uppercase tracking-wider transition-colors first:rounded-l-sm first:border-l last:rounded-r-sm ${
-            value === opt.value
-              ? "bg-ink text-paper"
-              : "text-graphite hover:text-ink"
-          }`}
-        >
-          {opt.label}
-        </button>
-      ))}
+      {options.map((opt, index) => {
+        const checked = value === opt.value;
+        return (
+          <button
+            key={opt.value}
+            ref={(el) => {
+              buttonRefs.current[index] = el;
+            }}
+            role="radio"
+            aria-checked={checked}
+            tabIndex={checked ? 0 : -1}
+            onClick={() => onChange(opt.value)}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+                e.preventDefault();
+                move(index, 1);
+              } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+                e.preventDefault();
+                move(index, -1);
+              }
+            }}
+            className={`focusable min-h-[40px] border-y border-r border-rule-strong px-2.5 py-1 font-mono text-[0.72rem] uppercase tracking-wider transition-colors first:rounded-l-sm first:border-l last:rounded-r-sm ${
+              checked ? "bg-ink text-paper" : "text-graphite hover:text-ink"
+            }`}
+          >
+            {opt.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

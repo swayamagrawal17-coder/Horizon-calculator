@@ -28,7 +28,7 @@ export function FrequencySelect({
         id={id}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="focusable min-h-[36px] rounded-sm border border-rule-strong bg-paper px-2 py-1 font-mono text-xs text-ink hover:border-ink"
+        className="focusable min-h-[40px] rounded-sm border border-rule-strong bg-paper px-2 py-1 font-mono text-xs text-ink hover:border-ink"
       >
         {FREQUENCIES.map((f) => (
           <option key={f.value} value={f.value}>

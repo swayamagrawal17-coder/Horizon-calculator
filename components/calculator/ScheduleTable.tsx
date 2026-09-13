@@ -64,15 +64,19 @@ export function ScheduleTable<Row extends { period: number }>({
             const summary = summariseYear(yearRows);
             return (
               <Fragment key={year}>
-                <tr
-                  className="cursor-pointer border-b border-rule-strong text-ink hover:text-accent"
-                  onClick={() => toggle(year)}
-                >
-                  <th scope="row" className="py-2 pr-3 text-left font-normal">
-                    <span className="inline-flex items-center gap-2">
-                      <span className="text-graphite">{isOpen ? "–" : "+"}</span>
+                <tr className="border-b border-rule-strong text-ink">
+                  <th scope="row" className="p-0 text-left font-normal">
+                    <button
+                      type="button"
+                      onClick={() => toggle(year)}
+                      aria-expanded={isOpen}
+                      className="focusable flex min-h-[40px] w-full items-center gap-2 py-2 pr-3 text-left hover:text-accent"
+                    >
+                      <span className="text-graphite" aria-hidden>
+                        {isOpen ? "–" : "+"}
+                      </span>
                       {yearLabel(year)}
-                    </span>
+                    </button>
                   </th>
                   {summary.map((value, i) => (
                     <td key={i} className="py-2 pl-3 text-right">

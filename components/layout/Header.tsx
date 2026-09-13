@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./ThemeToggle";
 
 const tabs = [
-  { href: "/", label: "EMI" },
-  { href: "/future-value", label: "Future value" },
-  { href: "/present-value", label: "Present value" },
+  { href: "/", label: "EMI", short: "EMI" },
+  { href: "/future-value", label: "Future value", short: "Future" },
+  { href: "/present-value", label: "Present value", short: "Present" },
 ];
 
 export function Header() {
@@ -39,7 +39,7 @@ export function Header() {
           <span className="hidden sm:inline">Horizon</span>
         </Link>
 
-        <nav className="no-scrollbar flex flex-1 items-stretch gap-4 overflow-x-auto sm:gap-5">
+        <nav className="flex flex-1 items-stretch gap-3 overflow-x-auto sm:gap-5">
           {tabs.map((tab) => {
             const active =
               tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
@@ -52,7 +52,8 @@ export function Header() {
                   active ? "text-ink" : "text-graphite hover:text-ink"
                 }`}
               >
-                {tab.label}
+                <span className="min-[400px]:hidden">{tab.short}</span>
+                <span className="hidden min-[400px]:inline">{tab.label}</span>
                 {active && (
                   <span className="absolute inset-x-0 -bottom-px h-0.5 bg-accent" />
                 )}

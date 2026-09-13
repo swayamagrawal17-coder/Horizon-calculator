@@ -24,9 +24,8 @@ const figure = Newsreader({
   display: "swap",
 });
 
-// TODO: point this at the real deployed domain once it's known — it backs
-// canonical URLs and Open Graph image/URL resolution.
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://horizon-calculator.vercel.app";
+// Backs canonical URLs and Open Graph image/URL resolution.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://horizon-calc.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

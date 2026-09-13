@@ -39,7 +39,7 @@ export function Header() {
           <span className="hidden sm:inline">Horizon</span>
         </Link>
 
-        <nav className="flex flex-1 items-stretch gap-3 overflow-x-auto sm:gap-5">
+        <nav className="no-scrollbar flex flex-1 items-stretch gap-3 overflow-x-auto sm:gap-5">
           {tabs.map((tab) => {
             const active =
               tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);

@@ -6,6 +6,7 @@ import { SliderField } from "@/components/calculator/SliderField";
 import { ResultRow, HeroFigure, SplitBar } from "@/components/calculator/ResultRow";
 import { TimePlot } from "@/components/calculator/TimePlot";
 import { ExportBar } from "@/components/calculator/ExportBar";
+import { Reveal } from "@/components/ui/Reveal";
 import { FrequencySelect, FREQUENCIES } from "@/components/calculator/FrequencySelect";
 import { SegmentedControl, Zone } from "@/components/ui/primitives";
 import { useCalculatorState } from "@/hooks/useCalculatorState";
@@ -175,29 +176,31 @@ export function PresentValuePage() {
             step={1}
             suffix="yr"
           />
-          <div className="rule-t space-y-4 pt-4">
-            <FrequencySelect
-              label="Compounding"
-              value={values.freq}
-              onChange={(v) => setField("freq", v)}
-            />
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-[0.82rem] font-medium text-graphite">Payment timing</span>
-              <SegmentedControl
-                label="Payment timing"
-                value={timing}
-                onChange={(v) => setField("timing", v)}
-                options={[
-                  { value: "end", label: "End" },
-                  { value: "begin", label: "Start" },
-                ]}
+          <Zone eyebrow="Compounding" className="mt-6 border-t border-rule pt-6">
+            <div className="space-y-4">
+              <FrequencySelect
+                label="Compounding"
+                value={values.freq}
+                onChange={(v) => setField("freq", v)}
               />
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-[0.82rem] font-medium text-graphite">Payment timing</span>
+                <SegmentedControl
+                  label="Payment timing"
+                  value={timing}
+                  onChange={(v) => setField("timing", v)}
+                  options={[
+                    { value: "end", label: "End" },
+                    { value: "begin", label: "Start" },
+                  ]}
+                />
+              </div>
             </div>
-          </div>
+          </Zone>
         </>
       }
       results={
-        <div className="space-y-7">
+        <Reveal className="space-y-7">
           <HeroFigure
             eyebrow="Present value"
             value={formatINR(result.pv)}
@@ -243,18 +246,18 @@ export function PresentValuePage() {
           </div>
 
           <ExportBar getShareUrl={shareUrl} onCsv={csv} onPdf={pdf} onReset={reset} />
-        </div>
+        </Reveal>
       }
       belowFold={
         <Zone eyebrow="The formula">
-          <p className="max-w-2xl text-sm leading-relaxed text-ink-2">
+          <p className="max-w-xl text-sm leading-relaxed text-ink-2">
             The lump sum is discounted with{" "}
-            <span className="font-mono text-ink">PV = FV / (1 + i)ⁿ</span>, and each
+            <span className="font-semibold text-ink">PV = FV / (1 + i)ⁿ</span>, and each
             recurring payment with the annuity factor{" "}
-            <span className="font-mono text-ink">PMT · [1 − (1 + i)⁻ⁿ] / i</span>. Here{" "}
-            <span className="font-mono text-ink">i</span> is the per-period rate (
+            <span className="font-semibold text-ink">PMT · [1 − (1 + i)⁻ⁿ] / i</span>. Here{" "}
+            <span className="font-semibold text-ink">i</span> is the per-period rate (
             {formatPercent(ratePerPeriodPct)}) and{" "}
-            <span className="font-mono text-ink">n</span> the number of periods (
+            <span className="font-semibold text-ink">n</span> the number of periods (
             {periods}). Choosing &ldquo;start&rdquo; multiplies the annuity term by
             (1 + i).
           </p>

@@ -63,8 +63,8 @@ export function TimePlot<Row extends object>({
   return (
     <figure className="m-0">
       <figcaption className="flex items-center justify-between">
-        <span className="eyebrow">{title}</span>
-        <span className="font-mono text-[0.7rem] text-graphite">
+        <span className="field-label">{title}</span>
+        <span className="text-[0.75rem] text-graphite">
           x · {xUnit}
         </span>
       </figcaption>
@@ -98,7 +98,7 @@ export function TimePlot<Row extends object>({
               axisLine={{ stroke: "rgb(var(--rule-strong))" }}
               tick={{
                 fontSize: 11,
-                fontFamily: "var(--font-mono)",
+                fontFamily: "var(--font-sans)",
                 fill: "rgb(var(--graphite))",
               }}
             />
@@ -110,7 +110,7 @@ export function TimePlot<Row extends object>({
               tickFormatter={(v: number) => formatCompactINR(v)}
               tick={{
                 fontSize: 10,
-                fontFamily: "var(--font-mono)",
+                fontFamily: "var(--font-sans)",
                 fill: "rgb(var(--graphite))",
               }}
             />
@@ -118,10 +118,10 @@ export function TimePlot<Row extends object>({
             <Tooltip
               cursor={{ stroke: "rgb(var(--rule-strong))" }}
               contentStyle={{
-                background: "rgb(var(--paper))",
-                border: "1px solid rgb(var(--ink))",
-                borderRadius: 2,
-                fontFamily: "var(--font-mono)",
+                background: "rgb(var(--paper-2))",
+                border: "1px solid rgb(var(--rule-strong))",
+                borderRadius: 10,
+                fontFamily: "var(--font-sans)",
                 fontSize: 12,
               }}
               labelStyle={{ color: "rgb(var(--graphite))" }}
@@ -184,7 +184,7 @@ export function TimePlot<Row extends object>({
 
       <p
         aria-live="polite"
-        className="rule-t mt-2 flex flex-wrap items-baseline gap-x-6 gap-y-1 pt-2 font-mono text-[0.8rem] tnum"
+        className="rule-t mt-2 flex flex-wrap items-baseline gap-x-6 gap-y-1 pt-2 text-[0.8rem] tnum"
       >
         {readout}
       </p>

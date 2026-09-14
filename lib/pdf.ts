@@ -7,15 +7,18 @@ import { formatCompactINR } from "./format";
 /* ------------------------------------------------------------------ */
 
 type RGB = [number, number, number];
-const PAPER: RGB = [252, 251, 248];
-const PAPER_2: RGB = [246, 244, 238];
-const INK: RGB = [25, 27, 25];
-const INK_2: RGB = [82, 86, 79];
-const GRAPHITE: RGB = [99, 103, 94];
-const RULE: RGB = [220, 215, 204];
-const RULE_STRONG: RGB = [178, 173, 159];
-const ACCENT: RGB = [178, 59, 30];
-const ACCENT_2: RGB = [122, 40, 20];
+const PAPER: RGB = [244, 246, 249];
+const PAPER_2: RGB = [255, 255, 255];
+const INK: RGB = [17, 24, 39];
+const INK_2: RGB = [63, 72, 89];
+const GRAPHITE: RGB = [91, 100, 114];
+const RULE: RGB = [226, 229, 234];
+const RULE_STRONG: RGB = [199, 204, 214];
+// warm amber — the cost of money
+const ACCENT: RGB = [180, 83, 9];
+const ACCENT_2: RGB = [146, 64, 14];
+// trustworthy blue — money that is yours
+const MINE: RGB = [29, 78, 216];
 
 const MARGIN = 40;
 
@@ -174,7 +177,7 @@ function drawChart(doc: jsPDF, x: number, y: number, w: number, h: number, confi
   doc.setLineWidth(0.75);
   doc.rect(x, y, w, h);
 
-  doc.setFont("courier", "normal");
+  doc.setFont("helvetica", "normal");
   doc.setFontSize(7);
   for (const frac of [0, 0.25, 0.5, 0.75, 1]) {
     const gy = y + h - frac * h;
@@ -192,14 +195,14 @@ function drawChart(doc: jsPDF, x: number, y: number, w: number, h: number, confi
     doc.setTextColor(...GRAPHITE);
     doc.text(formatX(t), tx, y + h + 12, { align: "center" });
   }
-  doc.setFont("helvetica", "italic");
+  doc.setFont("helvetica", "normal");
   doc.setFontSize(7);
   doc.setTextColor(...GRAPHITE);
   doc.text(config.xLabel, x + w, y + h + 25, { align: "right" });
 
   // Series
   for (const s of config.series) {
-    const tone = s.tone === "mine" ? INK : ACCENT;
+    const tone = s.tone === "mine" ? MINE : ACCENT;
     const tops = topsFor(s);
     const topPoints: [number, number][] = xs.map((v, i) => [mapX(v), mapY(tops[i])]);
 
@@ -226,7 +229,7 @@ function drawChart(doc: jsPDF, x: number, y: number, w: number, h: number, confi
   let legendX = x;
   doc.setFontSize(8);
   for (const s of config.series) {
-    const tone = s.tone === "mine" ? INK : ACCENT;
+    const tone = s.tone === "mine" ? MINE : ACCENT;
     if (s.kind === "area") {
       doc.setFillColor(...tone);
       doc.rect(legendX, legendY - 6, 10, 6, "F");
@@ -255,20 +258,17 @@ function drawSplitBar(doc: jsPDF, x: number, y: number, w: number, bar: PdfSplit
   const minePct = (Math.max(0, bar.mineValue) / total) * 100;
   const mineW = (w * minePct) / 100;
 
-  doc.setFillColor(...INK);
+  doc.setFillColor(...MINE);
   doc.rect(x, y, mineW, 10, "F");
   doc.setFillColor(...ACCENT);
   doc.rect(x + mineW, y, w - mineW, 10, "F");
-  doc.setDrawColor(...INK);
-  doc.setLineWidth(0.75);
-  doc.rect(x, y, w, 10);
 
   const capY = y + 22;
-  doc.setFont("courier", "normal");
+  doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(...GRAPHITE);
-  doc.text(`${bar.mineLabel.toUpperCase()} · ${minePct.toFixed(1)}%`, x, capY);
-  doc.text(`${bar.costLabel.toUpperCase()} · ${(100 - minePct).toFixed(1)}%`, x + w, capY, {
+  doc.text(`${bar.mineLabel} · ${minePct.toFixed(1)}%`, x, capY);
+  doc.text(`${bar.costLabel} · ${(100 - minePct).toFixed(1)}%`, x + w, capY, {
     align: "right",
   });
 
@@ -296,14 +296,14 @@ export function exportPdf(opts: PdfReportOptions): void {
 
   // Masthead
   drawMark(doc, MARGIN + 8, y + 8, 7);
-  doc.setFont("times", "bold");
+  doc.setFont("helvetica", "bold");
   doc.setFontSize(15);
   doc.setTextColor(...INK);
   doc.text("Horizon", MARGIN + 24, y + 12);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(...GRAPHITE);
-  doc.text(opts.eyebrow.toUpperCase(), PAGE_W - MARGIN, y + 12, { align: "right" });
+  doc.text(opts.eyebrow, PAGE_W - MARGIN, y + 12, { align: "right" });
   y += 26;
   doc.setDrawColor(...RULE_STRONG);
   doc.setLineWidth(1);
@@ -311,7 +311,7 @@ export function exportPdf(opts: PdfReportOptions): void {
   y += 24;
 
   // Title + meta
-  doc.setFont("times", "bold");
+  doc.setFont("helvetica", "bold");
   doc.setFontSize(20);
   doc.setTextColor(...INK);
   doc.text(opts.title, MARGIN, y);
@@ -335,9 +335,9 @@ export function exportPdf(opts: PdfReportOptions): void {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(...GRAPHITE);
-  doc.text(opts.hero.label.toUpperCase(), MARGIN, y);
+  doc.text(opts.hero.label, MARGIN, y);
   y += 30;
-  doc.setFont("times", "bold");
+  doc.setFont("helvetica", "bold");
   doc.setFontSize(28);
   doc.setTextColor(...INK);
   doc.text(pdfSafe(opts.hero.value), MARGIN, y);
@@ -357,7 +357,7 @@ export function exportPdf(opts: PdfReportOptions): void {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
     doc.setTextColor(...INK);
-    doc.text(opts.chart.title.toUpperCase(), MARGIN, y);
+    doc.text(opts.chart.title, MARGIN, y);
     y += 16;
     const gutter = 56; // room for "Rs. NN.NNCr"-width y-axis labels
     y = drawChart(doc, MARGIN + gutter, y, CONTENT_W - gutter, chartH, opts.chart);
@@ -396,10 +396,10 @@ export function exportPdf(opts: PdfReportOptions): void {
       startY: y,
       margin: { left: MARGIN, right: MARGIN },
       theme: "plain",
-      styles: { fontSize: 9, cellPadding: { top: 3, bottom: 3, left: 0, right: 0 } },
+      styles: { fontSize: 9, font: "helvetica", cellPadding: { top: 3, bottom: 3, left: 0, right: 0 } },
       columnStyles: {
         0: { textColor: GRAPHITE },
-        1: { halign: "right", fontStyle: "bold", font: "courier", textColor: INK },
+        1: { halign: "right", fontStyle: "bold", textColor: INK },
       },
       body: section.rows.map(pdfSafeRow),
     });
@@ -422,9 +422,9 @@ export function exportPdf(opts: PdfReportOptions): void {
       margin: { left: MARGIN, right: MARGIN, bottom: 60 },
       head: [opts.table.head.map(pdfSafe)],
       body: opts.table.body.map((row) => row.map(pdfSafeCell)),
-      styles: { fontSize: 8.5, cellPadding: 4, font: "courier" },
-      headStyles: { fillColor: INK, textColor: PAPER, font: "helvetica", fontStyle: "bold" },
-      alternateRowStyles: { fillColor: PAPER_2 },
+      styles: { fontSize: 8.5, cellPadding: 4, font: "helvetica" },
+      headStyles: { fillColor: MINE, textColor: PAPER_2, font: "helvetica", fontStyle: "bold" },
+      alternateRowStyles: { fillColor: PAPER },
     });
   }
 

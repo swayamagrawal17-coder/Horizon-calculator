@@ -5,9 +5,11 @@ import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./ThemeToggle";
 
 const tabs = [
-  { href: "/", label: "EMI", short: "EMI" },
+  { href: "/emi", label: "EMI", short: "EMI" },
   { href: "/future-value", label: "Future value", short: "Future" },
   { href: "/present-value", label: "Present value", short: "Present" },
+  { href: "/compare", label: "Compare", short: "Compare" },
+  { href: "/income-tax", label: "Income tax", short: "Tax" },
 ];
 
 export function Header() {
@@ -19,7 +21,7 @@ export function Header() {
         <Link
           href="/"
           aria-label="Horizon — home"
-          className="focusable flex shrink-0 items-center gap-2 py-4 font-figure text-lg"
+          className="focusable flex shrink-0 items-center gap-2 py-4 text-lg font-semibold"
         >
           <svg
             aria-hidden
@@ -41,8 +43,7 @@ export function Header() {
 
         <nav className="no-scrollbar flex flex-1 items-stretch gap-3 overflow-x-auto sm:gap-5">
           {tabs.map((tab) => {
-            const active =
-              tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
+            const active = pathname.startsWith(tab.href);
             return (
               <Link
                 key={tab.href}
@@ -55,7 +56,7 @@ export function Header() {
                 <span className="min-[400px]:hidden">{tab.short}</span>
                 <span className="hidden min-[400px]:inline">{tab.label}</span>
                 {active && (
-                  <span className="absolute inset-x-0 -bottom-px h-0.5 bg-accent" />
+                  <span className="absolute inset-x-0 -bottom-px h-0.5 bg-mine" />
                 )}
               </Link>
             );

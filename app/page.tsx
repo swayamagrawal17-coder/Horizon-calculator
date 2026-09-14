@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
-import { EmiCalculatorPage } from "@/components/pages/EmiCalculatorPage";
+import { HomePage } from "@/components/pages/HomePage";
 
 export const metadata: Metadata = {
-  title: "EMI Calculator — Horizon",
+  title: { absolute: "Horizon — Financial calculators" },
   description:
-    "Work out the monthly instalment on a reducing-balance loan, model a step-up EMI, and see the full amortization schedule.",
+    "EMI, Future Value, Present Value, Compare, and Income Tax — five calculators for the time value of money, in one place.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "EMI Calculator — Horizon",
+    siteName: "Horizon",
+    title: "Horizon — Financial calculators",
     description:
-      "Work out the monthly instalment on a reducing-balance loan, model a step-up EMI, and see the full amortization schedule.",
+      "EMI, Future Value, Present Value, Compare, and Income Tax — five calculators for the time value of money, in one place.",
   },
 };
 
 export default function Page() {
-  return <EmiCalculatorPage />;
+  return <HomePage />;
 }

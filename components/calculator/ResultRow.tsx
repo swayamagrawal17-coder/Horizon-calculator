@@ -12,7 +12,7 @@ export function ResultRow({ label, value, tone, strong }: RowProps) {
         {tone && (
           <span
             aria-hidden
-            className={`inline-block h-2 w-2 ${
+            className={`inline-block h-2 w-2 rounded-full ${
               tone === "mine" ? "bg-mine" : "bg-accent"
             }`}
           />
@@ -20,8 +20,8 @@ export function ResultRow({ label, value, tone, strong }: RowProps) {
         {label}
       </span>
       <span
-        className={`font-mono tnum ${
-          strong ? "text-ink" : "text-ink-2"
+        className={`tnum ${
+          strong ? "font-semibold text-ink" : "text-ink-2"
         } text-sm`}
       >
         {value}
@@ -41,19 +41,19 @@ export function HeroFigure({
 }) {
   return (
     <div>
-      <p className="eyebrow">{eyebrow}</p>
+      <p className="field-label">{eyebrow}</p>
       <p
         aria-live="polite"
-        className="font-figure text-[2.9rem] leading-[1.05] tracking-tight text-ink tnum sm:text-[3.4rem]"
+        className="text-[2.3rem] font-semibold leading-[1.05] tracking-tight text-ink tnum sm:text-[2.7rem]"
       >
         {value}
       </p>
-      {note && <p className="mt-1.5 font-mono text-[0.8rem] text-graphite">{note}</p>}
+      {note && <p className="mt-1.5 text-[0.8rem] text-graphite">{note}</p>}
     </div>
   );
 }
 
-/** Single ruled bar: money that is yours (ink) vs what it costs (accent). */
+/** Single bar: money that is yours (blue) vs what it costs (amber). */
 export function SplitBar({
   mine,
   cost,
@@ -70,14 +70,14 @@ export function SplitBar({
   return (
     <div>
       <div
-        className="flex h-3 w-full overflow-hidden rounded-sm border border-ink"
+        className="flex h-3 w-full overflow-hidden rounded-full"
         role="img"
         aria-label={`${mineLabel} ${minePct.toFixed(0)} percent, ${costLabel} ${(100 - minePct).toFixed(0)} percent`}
       >
         <div className="bg-mine" style={{ width: `${minePct}%` }} />
         <div className="bg-accent" style={{ width: `${100 - minePct}%` }} />
       </div>
-      <div className="mt-1.5 flex justify-between font-mono text-[0.72rem] uppercase tracking-wider text-graphite">
+      <div className="mt-1.5 flex justify-between text-[0.75rem] text-graphite">
         <span>
           {mineLabel} · {minePct.toFixed(1)}%
         </span>

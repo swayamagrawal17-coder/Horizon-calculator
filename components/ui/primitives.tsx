@@ -7,10 +7,10 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button({ className = "", variant = "outline", ...props }, ref) {
     const base =
-      "focusable inline-flex min-h-[40px] items-center justify-center gap-2 rounded-sm px-3.5 py-2 font-mono text-xs uppercase tracking-wider transition-colors disabled:opacity-40";
+      "focusable inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-40";
     const styles = {
-      ink: "bg-ink text-paper hover:bg-accent",
-      outline: "border border-rule-strong text-ink hover:border-ink",
+      ink: "bg-mine text-paper-2 hover:opacity-90",
+      outline: "border border-rule-strong text-ink hover:border-mine hover:text-mine",
       ghost: "text-graphite hover:text-ink",
     }[variant];
     return (
@@ -39,7 +39,11 @@ export function SegmentedControl<T extends string>({
   };
 
   return (
-    <div role="radiogroup" aria-label={label} className="flex">
+    <div
+      role="radiogroup"
+      aria-label={label}
+      className="inline-flex gap-0.5 rounded-full border border-rule bg-paper p-1"
+    >
       {options.map((opt, index) => {
         const checked = value === opt.value;
         return (
@@ -61,8 +65,8 @@ export function SegmentedControl<T extends string>({
                 move(index, -1);
               }
             }}
-            className={`focusable min-h-[40px] border-y border-r border-rule-strong px-2.5 py-1 font-mono text-[0.72rem] uppercase tracking-wider transition-colors first:rounded-l-sm first:border-l last:rounded-r-sm ${
-              checked ? "bg-ink text-paper" : "text-graphite hover:text-ink"
+            className={`focusable min-h-[32px] rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+              checked ? "bg-paper-2 text-ink shadow-sm" : "text-graphite hover:text-ink"
             }`}
           >
             {opt.label}
@@ -93,13 +97,13 @@ export function Toggle({
       <span className="text-[0.82rem] font-medium text-ink">{label}</span>
       <span
         aria-hidden
-        className={`relative h-5 w-9 shrink-0 rounded-sm border transition-colors ${
-          checked ? "border-ink bg-ink" : "border-rule-strong bg-paper"
+        className={`relative h-6 w-11 shrink-0 rounded-full border transition-colors ${
+          checked ? "border-mine bg-mine" : "border-rule-strong bg-paper"
         }`}
       >
         <span
-          className={`absolute top-0.5 h-3.5 w-3.5 rounded-[1px] transition-all ${
-            checked ? "left-[18px] bg-paper" : "left-0.5 bg-rule-strong"
+          className={`absolute top-0.5 h-5 w-5 rounded-full bg-paper-2 shadow-sm transition-all ${
+            checked ? "left-[22px]" : "left-0.5"
           }`}
         />
       </span>
@@ -107,7 +111,7 @@ export function Toggle({
   );
 }
 
-/** A ruled block that separates a zone of the worksheet. */
+/** A labeled subsection within a card. */
 export function Zone({
   eyebrow,
   aside,
@@ -122,8 +126,8 @@ export function Zone({
   return (
     <section className={className}>
       {(eyebrow || aside) && (
-        <div className="rule-b mb-5 flex items-center justify-between gap-4 pb-2">
-          {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+        <div className="mb-4 flex items-center justify-between gap-4">
+          {eyebrow && <h3 className="text-sm font-semibold text-ink">{eyebrow}</h3>}
           {aside}
         </div>
       )}

@@ -21,14 +21,13 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
-        figure: ["var(--font-figure)", "Georgia", "serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "Menlo", "monospace"],
       },
       borderRadius: {
         none: "0",
-        sm: "1px",
-        DEFAULT: "2px",
-        md: "3px",
+        sm: "6px",
+        DEFAULT: "10px",
+        md: "14px",
+        lg: "20px",
       },
       maxWidth: {
         work: "72rem",

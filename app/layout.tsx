@@ -1,26 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Sans, IBM_Plex_Mono, Newsreader } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
+import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { Header } from "@/components/layout/Header";
 import { RandomLetterSwap } from "@/components/ui/RandomLetterSwap";
 
-const sans = IBM_Plex_Sans({
+const sans = Inter({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
-  display: "swap",
-});
-const mono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-mono",
-  display: "swap",
-});
-const figure = Newsreader({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-figure",
   display: "swap",
 });
 
@@ -60,44 +49,42 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${sans.variable} ${mono.variable} ${figure.variable}`}
-    >
+    <html lang="en" suppressHydrationWarning className={sans.variable}>
       <body className="min-h-screen antialiased">
         <ThemeProvider>
-          <a
-            href="#main-content"
-            className="focusable fixed left-4 top-4 z-50 -translate-y-20 rounded-sm bg-ink px-4 py-2 text-sm text-paper transition-transform focus:translate-y-0"
-          >
-            Skip to content
-          </a>
-          <Header />
-          <main
-            id="main-content"
-            className="mx-auto w-full max-w-work px-4 pb-24 pt-8 sm:px-8"
-          >
-            {children}
-          </main>
-          <footer className="rule-t">
-            <div className="mx-auto flex max-w-work flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-5 sm:px-8">
-              <p className="eyebrow">
-                Indicative estimates · not financial advice
-              </p>
-              <p className="eyebrow">
-                Prepared by ·{" "}
-                <a
-                  href="https://swayam-agrawal.vercel.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="focusable text-ink underline decoration-dotted underline-offset-4 transition-colors hover:text-accent hover:decoration-solid"
-                >
-                  <RandomLetterSwap label="Swayam Agrawal" />
-                </a>
-              </p>
-            </div>
-          </footer>
+          <SmoothScroll>
+            <a
+              href="#main-content"
+              className="focusable fixed left-4 top-4 z-50 -translate-y-20 rounded-md bg-mine px-4 py-2 text-sm text-paper-2 transition-transform focus:translate-y-0"
+            >
+              Skip to content
+            </a>
+            <Header />
+            <main
+              id="main-content"
+              className="mx-auto w-full max-w-work px-4 pb-24 pt-8 sm:px-8"
+            >
+              {children}
+            </main>
+            <footer className="rule-t">
+              <div className="mx-auto flex max-w-work flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-5 sm:px-8">
+                <p className="text-[0.75rem] tracking-wide text-graphite">
+                  Indicative estimates · not financial advice
+                </p>
+                <p className="text-[0.75rem] tracking-wide text-graphite">
+                  Prepared by ·{" "}
+                  <a
+                    href="https://swayam-agrawal.vercel.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="focusable text-ink underline decoration-dotted underline-offset-4 transition-colors hover:text-mine hover:decoration-solid"
+                  >
+                    <RandomLetterSwap label="Swayam Agrawal" />
+                  </a>
+                </p>
+              </div>
+            </footer>
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

@@ -40,18 +40,18 @@ export function ScheduleTable<Row extends { period: number }>({
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[560px] font-mono text-xs tnum">
+      <table className="w-full min-w-[560px] text-xs tnum">
         <caption className="sr-only">{caption}</caption>
         <thead>
-          <tr className="border-b border-ink text-graphite">
-            <th scope="col" className="py-2 pr-3 text-left font-normal uppercase tracking-wider">
+          <tr className="border-b border-rule-strong text-graphite">
+            <th scope="col" className="py-2 pr-3 text-left font-medium">
               Period
             </th>
             {columns.map((c) => (
               <th
                 key={c.header}
                 scope="col"
-                className="py-2 pl-3 text-right font-normal uppercase tracking-wider"
+                className="py-2 pl-3 text-right font-medium"
               >
                 {c.header}
               </th>
@@ -70,7 +70,7 @@ export function ScheduleTable<Row extends { period: number }>({
                       type="button"
                       onClick={() => toggle(year)}
                       aria-expanded={isOpen}
-                      className="focusable flex min-h-[40px] w-full items-center gap-2 py-2 pr-3 text-left hover:text-accent"
+                      className="focusable flex min-h-[40px] w-full items-center gap-2 py-2 pr-3 text-left hover:text-mine"
                     >
                       <span className="text-graphite" aria-hidden>
                         {isOpen ? "–" : "+"}

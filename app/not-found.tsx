@@ -9,8 +9,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div className="py-16 text-center">
-      <p className="eyebrow">404</p>
-      <h1 className="mt-2 font-figure text-3xl leading-tight tracking-tight sm:text-[2.6rem]">
+      <h1 className="text-3xl leading-tight tracking-tight sm:text-[2.6rem]">
         This page doesn&apos;t exist
       </h1>
       <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-ink-2">
@@ -19,9 +18,9 @@ export default function NotFound() {
       </p>
       <Link
         href="/"
-        className="focusable mt-6 inline-flex min-h-[40px] items-center rounded-sm bg-ink px-4 py-2 font-mono text-xs uppercase tracking-wider text-paper hover:bg-accent"
+        className="focusable mt-6 inline-flex min-h-[40px] items-center rounded-lg bg-mine px-4 py-2 text-sm font-medium text-paper-2 hover:opacity-90"
       >
-        Back to the EMI calculator
+        Back to Horizon
       </Link>
     </div>
   );

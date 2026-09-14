@@ -7,6 +7,8 @@ import { ResultRow, HeroFigure, SplitBar } from "@/components/calculator/ResultR
 import { TimePlot } from "@/components/calculator/TimePlot";
 import { ScheduleTable } from "@/components/calculator/ScheduleTable";
 import { ExportBar } from "@/components/calculator/ExportBar";
+import { Callout } from "@/components/calculator/Callout";
+import { Reveal } from "@/components/ui/Reveal";
 import { SegmentedControl, Toggle, Zone } from "@/components/ui/primitives";
 import { useCalculatorState } from "@/hooks/useCalculatorState";
 import type { Schema } from "@/lib/urlState";
@@ -206,7 +208,7 @@ export function EmiCalculatorPage() {
     <CalculatorShell
       eyebrow="Loan · reducing balance"
       title="What a loan costs, month by month"
-      intro="The monthly instalment on a reducing-balance loan, and how the balance falls as interest gives way to principal. Turn on step-up EMI to raise the instalment as your income grows."
+      intro="EMI — your equated monthly instalment — is the fixed sum you repay each month on a reducing-balance loan. See what it costs, and how step-up EMI can clear it sooner."
       inputs={
         <>
           <SliderField
@@ -228,7 +230,7 @@ export function EmiCalculatorPage() {
             suffix="%"
           />
           <SliderField
-            label="Tenure"
+            label="Loan length"
             value={unit === "yr" ? Math.round(months / 12) : months}
             onChange={(v) =>
               setField("months", unit === "yr" ? Math.round(v) * 12 : Math.round(v))
@@ -250,70 +252,72 @@ export function EmiCalculatorPage() {
             }
           />
 
-          <div className="rule-t space-y-4 pt-3">
-            <Toggle
-              label="Step-up EMI"
-              checked={values.stepUp}
-              onChange={(v) => setField("stepUp", v)}
-            />
+          <Zone eyebrow="Step-up EMI (optional)" className="mt-6 border-t border-rule pt-6">
+            <div className="space-y-4">
+              <Toggle
+                label="Raise my instalment over time"
+                checked={values.stepUp}
+                onChange={(v) => setField("stepUp", v)}
+              />
 
-            {values.stepUp && (
-              <div className="space-y-4">
-                <p className="font-mono text-[0.75rem] leading-relaxed text-graphite">
-                  The instalment rises on a fixed schedule, so the loan clears
-                  sooner and costs less in interest.
-                </p>
-                <SliderField
-                  label="Raise the EMI by"
-                  value={values.stepUpPct}
-                  onChange={(v) => setField("stepUpPct", v)}
-                  min={0}
-                  max={20}
-                  step={1}
-                  suffix="%"
-                  hint="at each step"
-                />
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-[0.82rem] font-medium text-graphite">Step every</span>
-                  <SegmentedControl
-                    label="Step-up interval"
-                    value={String(values.stepEvery)}
-                    onChange={(v) => setField("stepEvery", Number(v))}
-                    options={[
-                      { value: "6", label: "6 mo" },
-                      { value: "12", label: "12 mo" },
-                      { value: "24", label: "24 mo" },
-                    ]}
-                  />
-                </div>
-                <SliderField
-                  label="Starting EMI"
-                  value={values.startEmi > 0 ? values.startEmi : Math.round(standardEmi)}
-                  onChange={(v) =>
-                    setField(
-                      "startEmi",
-                      Math.abs(v - standardEmi) < 1 ? 0 : Math.round(v),
-                    )
-                  }
-                  min={Math.round(standardEmi * 0.4)}
-                  max={Math.round(standardEmi * 1.5)}
-                  step={500}
-                  prefix="₹"
-                  hint={`standard ${formatINR(standardEmi)}`}
-                />
-                {comparison?.stepUp.underpaid && (
-                  <p className="border-l-2 border-accent pl-3 font-mono text-[0.7rem] leading-relaxed text-accent-2">
-                    The starting EMI doesn&apos;t cover the first month&apos;s interest,
-                    so the balance grows until the step-ups catch up.
+              {values.stepUp && (
+                <div className="space-y-4">
+                  <p className="text-[0.8rem] leading-relaxed text-graphite">
+                    The instalment rises on a fixed schedule, so the loan clears
+                    sooner and costs less in interest.
                   </p>
-                )}
-              </div>
-            )}
-          </div>
+                  <SliderField
+                    label="Raise the EMI by"
+                    value={values.stepUpPct}
+                    onChange={(v) => setField("stepUpPct", v)}
+                    min={0}
+                    max={20}
+                    step={1}
+                    suffix="%"
+                    hint="at each step"
+                  />
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-[0.82rem] font-medium text-graphite">Step every</span>
+                    <SegmentedControl
+                      label="Step-up interval"
+                      value={String(values.stepEvery)}
+                      onChange={(v) => setField("stepEvery", Number(v))}
+                      options={[
+                        { value: "6", label: "6 mo" },
+                        { value: "12", label: "12 mo" },
+                        { value: "24", label: "24 mo" },
+                      ]}
+                    />
+                  </div>
+                  <SliderField
+                    label="Starting EMI"
+                    value={values.startEmi > 0 ? values.startEmi : Math.round(standardEmi)}
+                    onChange={(v) =>
+                      setField(
+                        "startEmi",
+                        Math.abs(v - standardEmi) < 1 ? 0 : Math.round(v),
+                      )
+                    }
+                    min={Math.round(standardEmi * 0.4)}
+                    max={Math.round(standardEmi * 1.5)}
+                    step={500}
+                    prefix="₹"
+                    hint={`standard ${formatINR(standardEmi)}`}
+                  />
+                  {comparison?.stepUp.underpaid && (
+                    <Callout>
+                      The starting EMI doesn&apos;t cover the first month&apos;s interest,
+                      so the balance grows until the step-ups catch up.
+                    </Callout>
+                  )}
+                </div>
+              )}
+            </div>
+          </Zone>
         </>
       }
       results={
-        <div className="space-y-7">
+        <Reveal className="space-y-7">
           <HeroFigure
             eyebrow={comparison ? "Starting monthly EMI" : "Monthly EMI"}
             value={totals.heroValue}
@@ -364,9 +368,9 @@ export function EmiCalculatorPage() {
           </div>
 
           {comparison && (
-            <div className="rule-t rule-b py-3">
-              <p className="eyebrow mb-2">Step-up vs standard</p>
-              <div className="flex flex-wrap gap-x-8 gap-y-1 font-mono text-xs">
+            <div className="rounded-md border border-rule bg-paper px-4 py-3">
+              <p className="field-label mb-2">Step-up vs standard</p>
+              <div className="flex flex-wrap gap-x-8 gap-y-1 text-xs">
                 <span>
                   <span className="text-graphite">months saved </span>
                   {Math.max(0, comparison.monthsSaved)}
@@ -388,14 +392,14 @@ export function EmiCalculatorPage() {
               setShowSchedule(false);
             }}
           />
-        </div>
+        </Reveal>
       }
       belowFold={
         <Zone
           eyebrow="Amortization schedule"
           aside={
             <button
-              className="focusable -m-1 inline-flex min-h-[40px] items-center p-1 font-mono text-xs text-accent underline decoration-dotted underline-offset-4 hover:decoration-solid"
+              className="focusable -m-1 inline-flex min-h-[40px] items-center p-1 text-xs text-mine underline decoration-dotted underline-offset-4 hover:decoration-solid"
               onClick={() => setShowSchedule((s) => !s)}
               aria-expanded={showSchedule}
             >
@@ -425,7 +429,7 @@ export function EmiCalculatorPage() {
               }}
             />
           ) : (
-            <p className="font-mono text-xs text-graphite">
+            <p className="max-w-2xl text-xs text-graphite">
               Expand to read every instalment — principal, interest and the
               balance carried forward.
             </p>

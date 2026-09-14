@@ -3,41 +3,40 @@
 @tailwind utilities;
 
 /*
-  Horizon — a double-entry ledger for the time value of money. Warm paper, black
-  ink for the money that is yours, red ink for what money costs you (interest,
-  discount, the price of waiting). Figures are set in a printed-statement serif;
-  columns and controls run in a monospace so everything lines up like ruled paper.
+  Horizon — a plain, approachable calculator. Blue for the money that's
+  yours, warm amber for what it costs you (interest, discount, the price
+  of waiting), on a clean light surface with soft-rounded cards.
 */
 
 :root {
-  --paper: 252 251 248;
-  --paper-2: 246 244 238;
-  --ink: 25 27 25;
-  --ink-2: 82 86 79;
-  --graphite: 99 103 94;
-  --rule: 220 215 204;
-  --rule-strong: 178 173 159;
-  /* red ink — the cost of money */
-  --accent: 178 59 30;
-  --accent-2: 122 40 20;
-  /* black ink — money that is yours */
-  --mine: 25 27 25;
-  --grid: 25 27 25;
+  --paper: 244 246 249;
+  --paper-2: 255 255 255;
+  --ink: 17 24 39;
+  --ink-2: 63 72 89;
+  --graphite: 91 100 114;
+  --rule: 226 229 234;
+  --rule-strong: 199 204 214;
+  /* warm amber — the cost of money */
+  --accent: 180 83 9;
+  --accent-2: 146 64 14;
+  /* trustworthy blue — money that is yours */
+  --mine: 29 78 216;
+  --grid: 17 24 39;
 }
 
 :root[data-theme="dark"],
 :root.dark {
-  --paper: 21 22 23;
-  --paper-2: 28 30 31;
-  --ink: 232 229 221;
-  --ink-2: 184 182 173;
-  --graphite: 162 165 154;
-  --rule: 50 52 50;
-  --rule-strong: 78 81 76;
-  --accent: 232 106 60;
-  --accent-2: 244 148 112;
-  --mine: 232 229 221;
-  --grid: 232 229 221;
+  --paper: 15 18 22;
+  --paper-2: 26 30 36;
+  --ink: 231 233 237;
+  --ink-2: 183 188 198;
+  --graphite: 138 144 156;
+  --rule: 42 46 53;
+  --rule-strong: 62 67 76;
+  --accent: 245 158 11;
+  --accent-2: 251 191 36;
+  --mine: 96 165 250;
+  --grid: 231 233 237;
 }
 
 * {
@@ -56,30 +55,37 @@ body {
 }
 
 ::selection {
-  background: rgb(var(--accent) / 0.16);
+  background: rgb(var(--mine) / 0.16);
 }
 
 /* Type roles -------------------------------------------------------- */
+/* .font-figure / .font-mono / .eyebrow are no-op aliases onto the single
+   sans family — kept so pages not yet migrated off the old ledger look
+   don't fall back to system Georgia/Menlo once the old font variables
+   are gone. Remove these once every page has dropped the classNames. */
 .font-figure {
-  font-family: var(--font-figure), Georgia, "Times New Roman", serif;
-  font-optical-sizing: auto;
-  letter-spacing: -0.01em;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 .font-mono {
-  font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 .eyebrow {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
+  color: rgb(var(--graphite));
+}
+.field-label {
+  font-size: 0.75rem;
+  font-weight: 500;
   color: rgb(var(--graphite));
 }
 .tnum {
   font-variant-numeric: tabular-nums;
 }
 
-/* Range slider — a drafting control, not a pill -------------------- */
+/* Range slider — a plain, familiar control ------------------------- */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -89,54 +95,49 @@ input[type="range"] {
   cursor: ew-resize;
 }
 input[type="range"]::-webkit-slider-runnable-track {
-  height: 3px;
-  border-radius: 2px;
+  height: 4px;
+  border-radius: 9999px;
   background: rgb(var(--rule-strong));
 }
 input[type="range"]::-moz-range-track {
-  height: 3px;
-  border-radius: 2px;
+  height: 4px;
+  border-radius: 9999px;
   background: rgb(var(--rule-strong));
 }
 input[type="range"]::-moz-range-progress {
-  height: 3px;
-  border-radius: 2px;
-  background: rgb(var(--ink));
+  height: 4px;
+  border-radius: 9999px;
+  background: rgb(var(--mine));
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  margin-top: -8.5px;
-  height: 20px;
-  width: 20px;
-  border-radius: 2px;
-  background: rgb(var(--paper));
-  border: 2px solid rgb(var(--ink));
-  transition: border-color 0.12s, transform 0.12s;
-}
-input[type="range"]:hover::-webkit-slider-thumb,
-input[type="range"]:active::-webkit-slider-thumb {
-  border-color: rgb(var(--accent));
+  margin-top: -9px;
+  height: 22px;
+  width: 22px;
+  border-radius: 9999px;
+  background: rgb(var(--paper-2));
+  border: 2px solid rgb(var(--mine));
+  box-shadow: 0 1px 2px rgb(16 24 40 / 0.12);
+  transition: transform 0.12s;
 }
 input[type="range"]:active::-webkit-slider-thumb {
   transform: scale(1.1);
 }
 input[type="range"]::-moz-range-thumb {
-  height: 20px;
-  width: 20px;
-  border-radius: 2px;
-  background: rgb(var(--paper));
-  border: 2px solid rgb(var(--ink));
-}
-input[type="range"]:hover::-moz-range-thumb {
-  border-color: rgb(var(--accent));
+  height: 22px;
+  width: 22px;
+  border-radius: 9999px;
+  background: rgb(var(--paper-2));
+  border: 2px solid rgb(var(--mine));
+  box-shadow: 0 1px 2px rgb(16 24 40 / 0.12);
 }
 input[type="range"]:focus-visible::-webkit-slider-thumb {
-  outline: 2px solid rgb(var(--accent));
+  outline: 2px solid rgb(var(--mine));
   outline-offset: 2px;
 }
 input[type="range"]:focus-visible::-moz-range-thumb {
-  outline: 2px solid rgb(var(--accent));
+  outline: 2px solid rgb(var(--mine));
   outline-offset: 2px;
 }
 
@@ -144,8 +145,8 @@ input[type="range"]:focus-visible::-moz-range-thumb {
   h1,
   h2,
   h3 {
-    font-family: var(--font-figure), Georgia, serif;
-    font-weight: 400;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
   }
 }
 
@@ -166,7 +167,7 @@ input[type="range"]:focus-visible::-moz-range-thumb {
     display: none;
   }
   .focusable:focus-visible {
-    outline: 2px solid rgb(var(--accent));
+    outline: 2px solid rgb(var(--mine));
     outline-offset: 2px;
   }
 }

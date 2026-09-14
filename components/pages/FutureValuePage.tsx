@@ -6,6 +6,7 @@ import { SliderField } from "@/components/calculator/SliderField";
 import { ResultRow, HeroFigure, SplitBar } from "@/components/calculator/ResultRow";
 import { TimePlot } from "@/components/calculator/TimePlot";
 import { ExportBar } from "@/components/calculator/ExportBar";
+import { Reveal } from "@/components/ui/Reveal";
 import { FrequencySelect, FREQUENCIES } from "@/components/calculator/FrequencySelect";
 import { SegmentedControl, Zone } from "@/components/ui/primitives";
 import { useCalculatorState } from "@/hooks/useCalculatorState";
@@ -187,29 +188,31 @@ export function FutureValuePage() {
             step={1}
             suffix="yr"
           />
-          <div className="rule-t space-y-4 pt-4">
-            <FrequencySelect
-              label="Compounding"
-              value={values.freq}
-              onChange={(v) => setField("freq", v)}
-            />
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-[0.82rem] font-medium text-graphite">Contribution timing</span>
-              <SegmentedControl
-                label="Contribution timing"
-                value={timing}
-                onChange={(v) => setField("timing", v)}
-                options={[
-                  { value: "end", label: "End" },
-                  { value: "begin", label: "Start" },
-                ]}
+          <Zone eyebrow="Compounding" className="mt-6 border-t border-rule pt-6">
+            <div className="space-y-4">
+              <FrequencySelect
+                label="Compounding"
+                value={values.freq}
+                onChange={(v) => setField("freq", v)}
               />
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-[0.82rem] font-medium text-graphite">Contribution timing</span>
+                <SegmentedControl
+                  label="Contribution timing"
+                  value={timing}
+                  onChange={(v) => setField("timing", v)}
+                  options={[
+                    { value: "end", label: "End" },
+                    { value: "begin", label: "Start" },
+                  ]}
+                />
+              </div>
             </div>
-          </div>
+          </Zone>
         </>
       }
       results={
-        <div className="space-y-7">
+        <Reveal className="space-y-7">
           <HeroFigure
             eyebrow={`Future value in ${values.years} years`}
             value={formatINR(result.fv)}
@@ -264,14 +267,14 @@ export function FutureValuePage() {
               setShowTable(false);
             }}
           />
-        </div>
+        </Reveal>
       }
       belowFold={
         <Zone
           eyebrow="Year by year"
           aside={
             <button
-              className="focusable -m-1 inline-flex min-h-[40px] items-center p-1 font-mono text-xs text-accent underline decoration-dotted underline-offset-4 hover:decoration-solid"
+              className="focusable -m-1 inline-flex min-h-[40px] items-center p-1 text-xs text-mine underline decoration-dotted underline-offset-4 hover:decoration-solid"
               onClick={() => setShowTable((s) => !s)}
               aria-expanded={showTable}
             >
@@ -281,14 +284,14 @@ export function FutureValuePage() {
         >
           {showTable ? (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[440px] font-mono text-xs tnum">
+              <table className="w-full min-w-[440px] text-xs tnum">
                 <caption className="sr-only">Projected value at the end of each year</caption>
                 <thead>
-                  <tr className="border-b border-ink text-graphite">
-                    <th scope="col" className="py-2 pr-3 text-left font-normal uppercase tracking-wider">Year</th>
-                    <th scope="col" className="py-2 pl-3 text-right font-normal uppercase tracking-wider">Invested</th>
-                    <th scope="col" className="py-2 pl-3 text-right font-normal uppercase tracking-wider">Growth</th>
-                    <th scope="col" className="py-2 pl-3 text-right font-normal uppercase tracking-wider">Value</th>
+                  <tr className="border-b border-rule-strong text-graphite">
+                    <th scope="col" className="py-2 pr-3 text-left font-medium">Year</th>
+                    <th scope="col" className="py-2 pl-3 text-right font-medium">Invested</th>
+                    <th scope="col" className="py-2 pl-3 text-right font-medium">Growth</th>
+                    <th scope="col" className="py-2 pl-3 text-right font-medium">Value</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -304,7 +307,7 @@ export function FutureValuePage() {
               </table>
             </div>
           ) : (
-            <p className="font-mono text-xs text-graphite">
+            <p className="max-w-2xl text-xs text-graphite">
               Expand for the running split of contributions and growth at each year end.
             </p>
           )}

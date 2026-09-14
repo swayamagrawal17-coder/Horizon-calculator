@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
-import { clamp } from "@/lib/format";
+import { useId } from "react";
+import { useNumericInput, formatWithSep } from "@/hooks/useNumericInput";
 
 interface Props {
   label: string;
@@ -29,20 +29,12 @@ export function SliderField({
   labelAside,
 }: Props) {
   const id = useId();
-  const [text, setText] = useState(String(value));
-  const [editing, setEditing] = useState(false);
-
-  useEffect(() => {
-    if (!editing) setText(String(value));
-  }, [value, editing]);
-
-  const commit = () => {
-    setEditing(false);
-    const parsed = Number(text.replace(/[, ]/g, ""));
-    const next = clamp(Number.isFinite(parsed) ? parsed : value, min, max);
-    onChange(next);
-    setText(String(next));
-  };
+  const { editing, text, setText, startEditing, commit } = useNumericInput({
+    value,
+    onChange,
+    min,
+    max,
+  });
 
   return (
     <div className="py-1">
@@ -53,18 +45,15 @@ export function SliderField({
         {labelAside}
       </div>
 
-      <div className="mt-1 flex items-baseline gap-1 border-b border-transparent font-mono text-ink transition-colors focus-within:border-ink hover:border-rule-strong">
+      <div className="mt-1 flex items-baseline gap-1 border-b border-dashed border-rule-strong text-ink transition-colors focus-within:border-solid focus-within:border-mine hover:border-solid hover:border-mine">
         {prefix && <span className="text-graphite">{prefix}</span>}
         <input
           id={id}
           inputMode="decimal"
           aria-label={`${label}, type an exact value`}
-          className="w-full bg-transparent py-1 text-[1.35rem] leading-tight tracking-tight outline-none tnum"
+          className="w-full bg-transparent py-1 text-[1.35rem] font-semibold leading-tight tracking-tight outline-none tnum"
           value={editing ? text : formatWithSep(value)}
-          onFocus={() => {
-            setEditing(true);
-            setText(String(value));
-          }}
+          onFocus={startEditing}
           onChange={(e) => setText(e.target.value)}
           onBlur={commit}
           onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
@@ -84,7 +73,7 @@ export function SliderField({
         onChange={(e) => onChange(Number(e.target.value))}
       />
 
-      <div className="mt-0.5 flex items-center justify-between gap-2 font-mono text-[0.7rem] text-graphite tnum">
+      <div className="mt-0.5 flex items-center justify-between gap-2 text-[0.75rem] text-graphite tnum">
         <span>
           {prefix}
           {formatWithSep(min)}
@@ -102,9 +91,4 @@ export function SliderField({
       </div>
     </div>
   );
-}
-
-function formatWithSep(n: number): string {
-  if (!Number.isFinite(n)) return "0";
-  return n.toLocaleString("en-IN", { maximumFractionDigits: 2 });
 }

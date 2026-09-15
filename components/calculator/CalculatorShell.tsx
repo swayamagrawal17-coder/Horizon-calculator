@@ -1,14 +1,12 @@
 interface Props {
-  eyebrow: string;
   title: string;
   intro: string;
   inputs: React.ReactNode;
   results: React.ReactNode;
   belowFold?: React.ReactNode;
-  legend?: boolean;
 }
 
-const card = "rounded-md border border-rule bg-paper-2 p-5 shadow-sm sm:p-6";
+const card = "card";
 
 export function CalculatorShell({
   title,
@@ -26,20 +24,27 @@ export function CalculatorShell({
         <p className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-ink-2">{intro}</p>
       </header>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[19rem_minmax(0,1fr)]">
+      <div className="mt-8 grid min-w-0 gap-6 lg:grid-cols-[19rem_minmax(0,1fr)]">
         <form
           aria-label="Inputs"
-          className={`${card} space-y-5`}
+          className={`${card} min-w-0 space-y-5`}
           onSubmit={(e) => e.preventDefault()}
         >
+          <h2 className="sr-only">Inputs</h2>
           {inputs}
         </form>
-        <div aria-label="Results" className={card}>
+        <div aria-label="Results" className={`${card} min-w-0`}>
+          <h2 className="sr-only">Results</h2>
           {results}
         </div>
       </div>
 
-      {belowFold && <div className={`mt-6 ${card}`}>{belowFold}</div>}
+      {belowFold && (
+        <div className={`mt-6 ${card}`}>
+          <h2 className="sr-only">More detail</h2>
+          {belowFold}
+        </div>
+      )}
     </div>
   );
 }

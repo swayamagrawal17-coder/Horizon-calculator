@@ -8,7 +8,7 @@ import { RandomLetterSwap } from "@/components/ui/RandomLetterSwap";
 
 const sans = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   variable: "--font-sans",
   display: "swap",
 });
@@ -19,17 +19,17 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://horizon-calc.verce
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Horizon — EMI, Future Value & Present Value",
+    default: "Horizon — EMI, Future Value, Present Value, Compare & Income Tax",
     template: "%s — Horizon",
   },
   description:
-    "The time value of money over its full horizon: loan EMI and step-up EMI, future value and present value, drawn as balance-over-time plots with amortization schedules.",
+    "The time value of money over its full horizon: loan EMI and step-up EMI, future value and present value, side-by-side comparisons, and India income tax — drawn as balance-over-time plots with amortization schedules.",
   authors: [{ name: "Swayam Agrawal", url: "https://swayam-agrawal.vercel.app" }],
   creator: "Swayam Agrawal",
   openGraph: {
     siteName: "Horizon",
     type: "website",
-    title: "Horizon — EMI, Future Value & Present Value",
+    title: "Horizon — EMI, Future Value, Present Value, Compare & Income Tax",
     description:
       "The time value of money over its full horizon, drawn as balance-over-time plots with amortization schedules.",
   },

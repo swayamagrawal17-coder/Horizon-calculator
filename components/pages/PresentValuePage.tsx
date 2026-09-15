@@ -59,9 +59,9 @@ export function PresentValuePage() {
   useEffect(() => setScrub(values.years), [values.years]);
   const point = series.find((d) => d.year >= scrub - 1e-9) ?? series[series.length - 1];
 
-  const csv = async () => {
-    const { exportCsv } = await import("@/lib/csv");
-    exportCsv({
+  const excel = async () => {
+    const { exportXlsx } = await import("@/lib/xlsx");
+    exportXlsx({
       filename: "present-value",
       title: "Present Value Report",
       meta: [
@@ -134,7 +134,6 @@ export function PresentValuePage() {
 
   return (
     <CalculatorShell
-      eyebrow="Discount · time value"
       title="What future money is worth now"
       intro="A sum due later — plus any recurring future payments — discounted back to today. The plot shows how the same amount is worth less the longer you wait for it."
       inputs={
@@ -245,7 +244,7 @@ export function PresentValuePage() {
             </div>
           </div>
 
-          <ExportBar getShareUrl={shareUrl} onCsv={csv} onPdf={pdf} onReset={reset} />
+          <ExportBar getShareUrl={shareUrl} onExcel={excel} onPdf={pdf} onReset={reset} />
         </Reveal>
       }
       belowFold={

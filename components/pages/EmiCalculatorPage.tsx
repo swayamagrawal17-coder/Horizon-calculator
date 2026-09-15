@@ -90,9 +90,9 @@ export function EmiCalculatorPage() {
         tenure: formatTenure(months),
       };
 
-  const csv = async () => {
-    const { exportCsv } = await import("@/lib/csv");
-    exportCsv({
+  const excel = async () => {
+    const { exportXlsx } = await import("@/lib/xlsx");
+    exportXlsx({
       filename: "emi-schedule",
       title: comparison ? "Step-up EMI Report" : "Loan EMI Report",
       meta: [
@@ -206,7 +206,6 @@ export function EmiCalculatorPage() {
 
   return (
     <CalculatorShell
-      eyebrow="Loan · reducing balance"
       title="What a loan costs, month by month"
       intro="EMI — your equated monthly instalment — is the fixed sum you repay each month on a reducing-balance loan. See what it costs, and how step-up EMI can clear it sooner."
       inputs={
@@ -385,7 +384,7 @@ export function EmiCalculatorPage() {
 
           <ExportBar
             getShareUrl={shareUrl}
-            onCsv={csv}
+            onExcel={excel}
             onPdf={pdf}
             onReset={() => {
               reset();

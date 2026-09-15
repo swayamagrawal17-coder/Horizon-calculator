@@ -59,23 +59,6 @@ body {
 }
 
 /* Type roles -------------------------------------------------------- */
-/* .font-figure / .font-mono / .eyebrow are no-op aliases onto the single
-   sans family — kept so pages not yet migrated off the old ledger look
-   don't fall back to system Georgia/Menlo once the old font variables
-   are gone. Remove these once every page has dropped the classNames. */
-.font-figure {
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-}
-.font-mono {
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-}
-.eyebrow {
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: rgb(var(--graphite));
-}
 .field-label {
   font-size: 0.75rem;
   font-weight: 500;
@@ -147,6 +130,12 @@ input[type="range"]:focus-visible::-moz-range-thumb {
   h3 {
     font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
     font-weight: 600;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-md border border-rule bg-paper-2 p-5 shadow-sm sm:p-6;
   }
 }
 

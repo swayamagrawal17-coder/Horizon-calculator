@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/primitives";
 
 export function ExportBar({
   getShareUrl,
-  onCsv,
+  onExcel,
   onPdf,
   onReset,
 }: {
   getShareUrl: () => string;
-  onCsv: () => void;
+  onExcel: () => void;
   onPdf: () => void;
   onReset: () => void;
 }) {
@@ -31,7 +31,7 @@ export function ExportBar({
       <Button onClick={copy} variant="ink">
         {copied ? "Link copied" : "Copy link"}
       </Button>
-      <Button onClick={onCsv}>CSV</Button>
+      <Button onClick={onExcel}>Excel</Button>
       <Button onClick={onPdf}>PDF</Button>
       <Button onClick={onReset} variant="ghost" className="ml-auto">
         Reset

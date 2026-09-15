@@ -59,7 +59,7 @@ export function HomePage() {
           <Link
             key={entry.href}
             href={entry.href}
-            className="focusable group rounded-md border border-rule bg-paper-2 p-5 shadow-sm transition-colors hover:border-mine sm:p-6"
+            className="focusable group card transition-colors hover:border-mine"
           >
             <p className="field-label">{entry.eyebrow}</p>
             <p className="mt-1.5 text-xl font-semibold text-ink">{entry.title}</p>

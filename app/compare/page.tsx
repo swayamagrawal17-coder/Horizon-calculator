@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     "Line up two to four loans, savings plans, or payouts at different amounts and rates, side by side.",
   alternates: { canonical: "/compare/" },
   openGraph: {
-    title: "Compare — Horizon",
+    title: "Compare Calculator — Horizon",
     description:
       "Line up two to four loans, savings plans, or payouts at different amounts and rates, side by side.",
   },

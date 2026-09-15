@@ -60,9 +60,9 @@ export function FutureValuePage() {
   useEffect(() => setScrub(values.years), [values.years]);
   const point = series.find((d) => d.year >= scrub - 1e-9) ?? series[series.length - 1];
 
-  const csv = async () => {
-    const { exportCsv } = await import("@/lib/csv");
-    exportCsv({
+  const excel = async () => {
+    const { exportXlsx } = await import("@/lib/xlsx");
+    exportXlsx({
       filename: "future-value-projection",
       title: "Future Value Report",
       meta: [
@@ -146,7 +146,6 @@ export function FutureValuePage() {
 
   return (
     <CalculatorShell
-      eyebrow="Savings · compound growth"
       title="What today's money becomes"
       intro="A lump sum now plus regular contributions, compounded at your chosen frequency. The plot separates the money you put in from the growth it earns."
       inputs={
@@ -260,7 +259,7 @@ export function FutureValuePage() {
 
           <ExportBar
             getShareUrl={shareUrl}
-            onCsv={csv}
+            onExcel={excel}
             onPdf={pdf}
             onReset={() => {
               reset();

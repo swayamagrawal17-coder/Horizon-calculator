@@ -277,9 +277,9 @@ export function ComparePage() {
   const chartSeries: CompareSeries[] = results.map((r) => ({ label: r.label, data: r.timeSeries }));
   const chartTitle = mode === "emi" ? "Outstanding balance" : mode === "fv" ? "Projected value" : "Worth today, by delay";
 
-  const csv = async () => {
-    const { exportCsv } = await import("@/lib/csv");
-    exportCsv({
+  const excel = async () => {
+    const { exportXlsx } = await import("@/lib/xlsx");
+    exportXlsx({
       filename: "comparison",
       title: "Comparison Report",
       meta: [["Calculator", mode === "emi" ? "EMI" : mode === "fv" ? "Future value" : "Present value"], ["Share link", shareUrl()]],
@@ -364,7 +364,6 @@ export function ComparePage() {
 
   return (
     <CalculatorShell
-      eyebrow="Side by side"
       title="Compare loans, savings, or payouts"
       intro="Line up two to four scenarios of the same calculator — different amounts, different rates, different terms — and see which one comes out ahead."
       inputs={
@@ -426,7 +425,7 @@ export function ComparePage() {
 
           <CompareChart title={chartTitle} xLabel="years" series={chartSeries} />
 
-          <ExportBar getShareUrl={shareUrl} onCsv={csv} onPdf={pdf} onReset={reset} />
+          <ExportBar getShareUrl={shareUrl} onExcel={excel} onPdf={pdf} onReset={reset} />
         </Reveal>
       }
     />

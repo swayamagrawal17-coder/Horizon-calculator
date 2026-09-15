@@ -5,8 +5,8 @@ export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
 const mark = `<svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" viewBox="0 0 32 32" fill="none">
-  <path d="M8 19A8 8 0 0 1 24 19Z" fill="#b23b1e"/>
-  <path d="M3.5 19H28.5" stroke="#191b19" stroke-width="3" stroke-linecap="round"/>
+  <path d="M8 19A8 8 0 0 1 24 19Z" fill="#b45309"/>
+  <path d="M3.5 19H28.5" stroke="#1d4ed8" stroke-width="3" stroke-linecap="round"/>
 </svg>`;
 
 export default function AppleIcon() {
@@ -19,7 +19,7 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#fcfbf8",
+          background: "#f4f6f9",
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}

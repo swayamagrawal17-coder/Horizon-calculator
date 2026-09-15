@@ -93,11 +93,11 @@ export function IncomeTaxPage() {
   const comparison = useMemo(() => compareTaxRegimes(input), [input]);
   const recommendedLabel = comparison.recommended === "old" ? "Old regime" : "New regime";
 
-  const csv = async () => {
-    const { exportCsv } = await import("@/lib/csv");
+  const excel = async () => {
+    const { exportXlsx } = await import("@/lib/xlsx");
     const oldRows = breakdownRows(comparison.oldRegime);
     const newRows = breakdownRows(comparison.newRegime);
-    exportCsv({
+    exportXlsx({
       filename: "income-tax-comparison",
       title: "Income Tax Report",
       meta: [
@@ -141,7 +141,6 @@ export function IncomeTaxPage() {
 
   return (
     <CalculatorShell
-      eyebrow="India · FY 2025-26"
       title="Old regime or new regime — which pays less"
       intro="Enter your income and deductions once, and see the tax payable under both regimes, side by side."
       inputs={
@@ -351,7 +350,7 @@ export function IncomeTaxPage() {
             />
           </div>
 
-          <ExportBar getShareUrl={shareUrl} onCsv={csv} onPdf={pdf} onReset={reset} />
+          <ExportBar getShareUrl={shareUrl} onExcel={excel} onPdf={pdf} onReset={reset} />
         </Reveal>
       }
       belowFold={

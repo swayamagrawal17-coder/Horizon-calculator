@@ -1,4 +1,12 @@
-import { forwardRef, useRef } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+
+// next/dynamic collapses the generic to its widest instantiation; the
+// underlying component is genuinely generic, so restore that type here.
+const SegmentedControlMotion = dynamic(
+  () => import("./SegmentedControlMotion").then((m) => m.SegmentedControlMotion),
+  { ssr: false },
+) as unknown as <T extends string>(props: SegmentedControlProps<T>) => React.ReactElement;
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "ink" | "outline" | "ghost";
@@ -7,7 +15,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button({ className = "", variant = "outline", ...props }, ref) {
     const base =
-      "focusable inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-40";
+      "focusable inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-[color,background-color,border-color,transform] duration-150 active:scale-[0.97] disabled:opacity-40 disabled:active:scale-100";
     const styles = {
       ink: "bg-mine text-paper-2 hover:opacity-90",
       outline: "border border-rule-strong text-ink hover:border-mine hover:text-mine",
@@ -19,17 +27,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   },
 );
 
-export function SegmentedControl<T extends string>({
-  options,
-  value,
-  onChange,
-  label,
-}: {
+interface SegmentedControlProps<T extends string> {
   options: { value: T; label: string }[];
   value: string;
   onChange: (v: T) => void;
   label: string;
-}) {
+}
+
+/** Shown before hydration and under prefers-reduced-motion — same
+ * markup and coloring as the animated version, minus the sliding pill. */
+function SegmentedControlStatic<T extends string>({
+  options,
+  value,
+  onChange,
+  label,
+}: SegmentedControlProps<T>) {
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const move = (fromIndex: number, delta: number) => {
@@ -66,7 +78,7 @@ export function SegmentedControl<T extends string>({
               }
             }}
             className={`focusable min-h-[32px] rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-              checked ? "bg-paper-2 text-ink shadow-sm" : "text-graphite hover:text-ink"
+              checked ? "bg-mine/10 text-mine" : "text-graphite hover:text-ink"
             }`}
           >
             {opt.label}
@@ -75,6 +87,16 @@ export function SegmentedControl<T extends string>({
       })}
     </div>
   );
+}
+
+/** A pill toggle whose selected option is a sliding highlight, not just a
+ * color swap — see SegmentedControlMotion.tsx for the animated half. */
+export function SegmentedControl<T extends string>(props: SegmentedControlProps<T>) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return <SegmentedControlStatic {...props} />;
+  return <SegmentedControlMotion {...props} />;
 }
 
 export function Toggle({
@@ -97,12 +119,12 @@ export function Toggle({
       <span className="text-[0.82rem] font-medium text-ink">{label}</span>
       <span
         aria-hidden
-        className={`relative h-6 w-11 shrink-0 rounded-full border transition-colors ${
+        className={`relative h-6 w-11 shrink-0 rounded-full border transition-colors duration-200 ${
           checked ? "border-mine bg-mine" : "border-rule-strong bg-paper"
         }`}
       >
         <span
-          className={`absolute top-0.5 h-5 w-5 rounded-full bg-paper-2 shadow-sm transition-all ${
+          className={`absolute top-0.5 h-5 w-5 rounded-full bg-paper-2 shadow-sm transition-[left] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             checked ? "left-[22px]" : "left-0.5"
           }`}
         />

@@ -49,8 +49,8 @@ export function HomePage() {
         </h1>
         <p className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-ink-2">
           Pick a calculator below. Every figure updates live, every page can be
-          shared by its URL, and every result can be downloaded as a CSV or a
-          PDF report.
+          shared by its URL, and every result can be downloaded as an Excel or
+          a PDF report.
         </p>
       </header>
 
@@ -59,7 +59,7 @@ export function HomePage() {
           <Link
             key={entry.href}
             href={entry.href}
-            className="focusable group card transition-colors hover:border-mine"
+            className="focusable group card transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-mine hover:shadow-md active:translate-y-0 active:scale-[0.99] active:shadow-sm"
           >
             <p className="field-label">{entry.eyebrow}</p>
             <p className="mt-1.5 text-xl font-semibold text-ink">{entry.title}</p>

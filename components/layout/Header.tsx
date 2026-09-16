@@ -1,9 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./ThemeToggle";
+
+// framer-motion loads in its own chunk, off the shared root-layout bundle
+// every page pays for — mirrors ThemeToggle/SolarSwitch and Reveal.
+const NavUnderline = dynamic(
+  () => import("./HeaderMotion").then((m) => m.NavUnderline),
+  { ssr: false, loading: () => <span className="absolute inset-x-0 -bottom-px h-0.5 bg-mine" /> },
+);
+const MobileNav = dynamic(() => import("./HeaderMotion").then((m) => m.MobileNav), { ssr: false });
 
 const tabs = [
   { href: "/emi", label: "EMI" },
@@ -62,9 +71,7 @@ export function Header() {
                     }`}
                   >
                     {tab.label}
-                    {active && (
-                      <span className="absolute inset-x-0 -bottom-px h-0.5 bg-mine" />
-                    )}
+                    {active && <NavUnderline />}
                   </Link>
                 );
               })}
@@ -82,7 +89,7 @@ export function Header() {
               aria-controls="mobile-nav"
               aria-label={open ? "Close menu" : "Open menu"}
               onClick={() => setOpen((o) => !o)}
-              className="focusable flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-rule-strong text-ink transition-colors hover:border-mine sm:hidden"
+              className="focusable flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-rule-strong text-ink transition-[border-color,transform] duration-150 hover:border-mine active:scale-90 sm:hidden"
             >
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
                 {open ? (
@@ -111,38 +118,12 @@ export function Header() {
           <header> — its backdrop-blur would otherwise become the containing
           block for a `fixed` descendant, shrinking the backdrop to the
           header's own height instead of the full viewport. */}
-      {open && (
-        <>
-          <button
-            aria-hidden
-            tabIndex={-1}
-            onClick={() => setOpen(false)}
-            className="fixed inset-0 z-20 bg-ink/10 sm:hidden"
-          />
-          <nav
-            id="mobile-nav"
-            aria-label="Primary"
-            className="absolute inset-x-4 top-full z-30 mt-2 space-y-1 rounded-md border border-rule bg-paper-2 p-2 shadow-sm sm:hidden"
-          >
-            {tabs.map((tab) => {
-              const active = pathname.startsWith(tab.href);
-              return (
-                <Link
-                  key={tab.href}
-                  href={tab.href}
-                  aria-current={active ? "page" : undefined}
-                  onClick={() => setOpen(false)}
-                  className={`focusable flex min-h-[44px] items-center rounded-md px-3 text-sm font-medium transition-colors ${
-                    active ? "bg-paper text-mine" : "text-ink hover:bg-paper"
-                  }`}
-                >
-                  {tab.label}
-                </Link>
-              );
-            })}
-          </nav>
-        </>
-      )}
+      <MobileNav
+        open={open}
+        tabs={tabs}
+        activeHref={(href) => pathname.startsWith(href)}
+        onClose={() => setOpen(false)}
+      />
     </div>
   );
 }

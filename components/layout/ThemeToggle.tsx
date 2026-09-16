@@ -24,7 +24,7 @@ export function ThemeToggle() {
       suppressHydrationWarning
       aria-label={mounted ? `Switch to ${isDark ? "light" : "dark"} paper` : "Switch theme"}
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="focusable flex h-11 w-11 items-center justify-center rounded-full border border-rule-strong text-ink transition-colors hover:border-mine"
+      className="focusable flex h-11 w-11 items-center justify-center rounded-full border border-rule-strong text-ink transition-[border-color,transform] duration-150 hover:border-mine active:scale-90"
     >
       {mounted ? <SolarSwitch isDark={isDark} /> : <SolarSwitchStatic />}
     </button>

@@ -85,8 +85,12 @@ export function ScheduleTable<Row extends { period: number }>({
                   ))}
                 </tr>
                 {isOpen &&
-                  yearRows.map((row) => (
-                    <tr key={row.period} className="border-b border-rule text-ink-2">
+                  yearRows.map((row, i) => (
+                    <tr
+                      key={row.period}
+                      className="animate-rise-in border-b border-rule text-ink-2"
+                      style={{ animationDelay: `${Math.min(i, 8) * 12}ms` }}
+                    >
                       <td className="py-1.5 pr-3 pl-4 text-left text-graphite">
                         {String(row.period).padStart(3, "0")}
                       </td>

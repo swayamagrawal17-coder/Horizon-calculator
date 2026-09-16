@@ -43,6 +43,10 @@
   border-color: rgb(var(--rule));
 }
 
+.card {
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
 }
@@ -52,10 +56,16 @@ body {
   color: rgb(var(--ink));
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   font-feature-settings: "ss01" 1;
+  transition: background-color 0.35s ease, color 0.35s ease;
 }
 
 ::selection {
   background: rgb(var(--mine) / 0.16);
+}
+
+input,
+textarea {
+  caret-color: rgb(var(--mine));
 }
 
 /* Type roles -------------------------------------------------------- */
@@ -102,10 +112,14 @@ input[type="range"]::-webkit-slider-thumb {
   background: rgb(var(--paper-2));
   border: 2px solid rgb(var(--mine));
   box-shadow: 0 1px 2px rgb(16 24 40 / 0.12);
-  transition: transform 0.12s;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.08);
+  box-shadow: 0 2px 6px rgb(var(--mine) / 0.25);
 }
 input[type="range"]:active::-webkit-slider-thumb {
-  transform: scale(1.1);
+  transform: scale(1.18);
 }
 input[type="range"]::-moz-range-thumb {
   height: 22px;
@@ -114,6 +128,14 @@ input[type="range"]::-moz-range-thumb {
   background: rgb(var(--paper-2));
   border: 2px solid rgb(var(--mine));
   box-shadow: 0 1px 2px rgb(16 24 40 / 0.12);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+input[type="range"]:hover::-moz-range-thumb {
+  transform: scale(1.08);
+  box-shadow: 0 2px 6px rgb(var(--mine) / 0.25);
+}
+input[type="range"]:active::-moz-range-thumb {
+  transform: scale(1.18);
 }
 input[type="range"]:focus-visible::-webkit-slider-thumb {
   outline: 2px solid rgb(var(--mine));
@@ -174,7 +196,27 @@ input[type="range"]:focus-visible::-moz-range-thumb {
 }
 ::-webkit-scrollbar-thumb {
   background: rgb(var(--rule-strong));
+  border-radius: 9999px;
+  transition: background-color 0.15s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--mine) / 0.55);
 }
 ::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* Entrance keyframes — a meaningful moment appearing, not decoration ---- */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-rise-in {
+  animation: rise-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }

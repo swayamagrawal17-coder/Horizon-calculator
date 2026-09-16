@@ -74,8 +74,14 @@ export function SplitBar({
         role="img"
         aria-label={`${mineLabel} ${minePct.toFixed(0)} percent, ${costLabel} ${(100 - minePct).toFixed(0)} percent`}
       >
-        <div className="bg-mine" style={{ width: `${minePct}%` }} />
-        <div className="bg-accent" style={{ width: `${100 - minePct}%` }} />
+        <div
+          className="bg-mine transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          style={{ width: `${minePct}%` }}
+        />
+        <div
+          className="bg-accent transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          style={{ width: `${100 - minePct}%` }}
+        />
       </div>
       <div className="mt-1.5 flex justify-between text-[0.75rem] text-graphite">
         <span>

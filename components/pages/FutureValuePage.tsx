@@ -5,6 +5,7 @@ import { CalculatorShell } from "@/components/calculator/CalculatorShell";
 import { SliderField } from "@/components/calculator/SliderField";
 import { ResultRow, HeroFigure, SplitBar } from "@/components/calculator/ResultRow";
 import { TimePlot } from "@/components/calculator/TimePlot";
+import { TipCard } from "@/components/calculator/TipCard";
 import { ExportBar } from "@/components/calculator/ExportBar";
 import { Reveal } from "@/components/ui/Reveal";
 import { FrequencySelect, FREQUENCIES } from "@/components/calculator/FrequencySelect";
@@ -256,6 +257,13 @@ export function FutureValuePage() {
               <ResultRow label="Periods" value={`${periods} · ${perLabel}`} />
             </div>
           </div>
+
+          <TipCard title="Why starting early matters" href="/learn/power-of-compounding/" linkLabel="The power of compounding">
+
+            <p>Try lowering the time by 5 years and see how much the projected value drops. Most of the growth comes late, so extra years usually matter more than a slightly larger deposit. The rate here is an assumption, not a promise.</p>
+
+          </TipCard>
+
 
           <ExportBar
             getShareUrl={shareUrl}

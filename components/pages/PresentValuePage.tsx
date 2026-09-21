@@ -5,6 +5,7 @@ import { CalculatorShell } from "@/components/calculator/CalculatorShell";
 import { SliderField } from "@/components/calculator/SliderField";
 import { ResultRow, HeroFigure, SplitBar } from "@/components/calculator/ResultRow";
 import { TimePlot } from "@/components/calculator/TimePlot";
+import { TipCard } from "@/components/calculator/TipCard";
 import { ExportBar } from "@/components/calculator/ExportBar";
 import { Reveal } from "@/components/ui/Reveal";
 import { FrequencySelect, FREQUENCIES } from "@/components/calculator/FrequencySelect";
@@ -243,6 +244,13 @@ export function PresentValuePage() {
               <ResultRow label="Periods" value={`${periods} · ${perLabel}`} />
             </div>
           </div>
+
+          <TipCard title="Why a future rupee is worth less" href="/learn/power-of-compounding/" linkLabel="How compounding and time work">
+
+            <p>The discount rate stands in for inflation and the return you could earn elsewhere. Raise it and watch the present value fall. Picking a realistic rate matters more than the arithmetic.</p>
+
+          </TipCard>
+
 
           <ExportBar getShareUrl={shareUrl} onExcel={excel} onPdf={pdf} onReset={reset} />
         </Reveal>

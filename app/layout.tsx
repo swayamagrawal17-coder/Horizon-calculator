@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
@@ -69,7 +70,13 @@ export default function RootLayout({
             <footer className="rule-t">
               <div className="mx-auto flex max-w-work flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-5 sm:px-8">
                 <p className="text-[0.75rem] tracking-wide text-graphite">
-                  Indicative estimates · not financial advice
+                  Indicative estimates · not financial advice ·{" "}
+                  <Link
+                    href="/disclaimer/"
+                    className="focusable text-ink underline decoration-dotted underline-offset-4 transition-colors hover:text-mine hover:decoration-solid"
+                  >
+                    Disclaimer
+                  </Link>
                 </p>
                 <p className="text-[0.75rem] tracking-wide text-graphite">
                   Prepared by ·{" "}

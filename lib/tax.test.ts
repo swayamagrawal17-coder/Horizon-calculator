@@ -3,6 +3,7 @@ import {
   compareTaxRegimes,
   computeNewRegime,
   computeOldRegime,
+  deductionHeadroom,
   hraExemption,
   slabTaxNew,
   slabTaxOld,
@@ -124,5 +125,32 @@ describe("compareTaxRegimes", () => {
     const c = compareTaxRegimes(baseInput({ grossSalary: 1_600_000 }));
     expect(c.newRegime.totalTaxPayable).toBeLessThan(c.oldRegime.totalTaxPayable);
     expect(c.recommended).toBe("new");
+  });
+});
+
+describe("deductionHeadroom", () => {
+  it("reports full room when nothing is claimed", () => {
+    const h = deductionHeadroom(baseInput({ grossSalary: 1_500_000 }));
+    expect(h.c80C).toBe(150_000);
+    expect(h.nps).toBe(50_000);
+    expect(h.d80D).toBe(50_000);
+    expect(h.taxSaved).toBeGreaterThan(0);
+  });
+
+  it("reports zero room and zero saving when every limit is used", () => {
+    const h = deductionHeadroom(
+      baseInput({
+        grossSalary: 1_500_000,
+        deductions80C: 150_000,
+        nps80CCD1B: 50_000,
+        healthInsuranceSelf: 25_000,
+        healthInsuranceParents: 25_000,
+      }),
+    );
+    expect(h).toEqual({ c80C: 0, nps: 0, d80D: 0, taxSaved: 0 });
+  });
+
+  it("saves nothing when income is already under the rebate", () => {
+    expect(deductionHeadroom(baseInput({ grossSalary: 400_000 })).taxSaved).toBe(0);
   });
 });

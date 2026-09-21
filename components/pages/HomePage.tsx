@@ -37,6 +37,13 @@ const entries = [
     description:
       "Old regime versus new regime, worked out side by side so you can see which pays less.",
   },
+  {
+    href: "/learn",
+    eyebrow: "Guides · education only",
+    title: "Learn",
+    description:
+      "Plain-language guides on saving tax, compounding, SIPs and loans, each linked to a calculator.",
+  },
 ] as const;
 
 export function HomePage() {

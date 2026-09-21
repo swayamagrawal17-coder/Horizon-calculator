@@ -183,3 +183,38 @@ export function compareTaxRegimes(input: TaxInput): TaxComparison {
   const savings = Math.abs(oldRegime.totalTaxPayable - newRegime.totalTaxPayable);
   return { oldRegime, newRegime, recommended, savings };
 }
+
+export interface DeductionHeadroom {
+  /** Unused 80C room (limit ₹1.5L). */
+  c80C: number;
+  /** Unused 80CCD(1B) room (limit ₹50k). */
+  nps: number;
+  /** Unused 80D room across self and parents. */
+  d80D: number;
+  /** Old-regime tax saved if all three were fully used; 0 if it wouldn't help. */
+  taxSaved: number;
+}
+
+/** How much old-regime deduction room is left, and roughly what filling it would save. */
+export function deductionHeadroom(input: TaxInput): DeductionHeadroom {
+  const selfCap = input.ageBand === "below60" ? 25_000 : 50_000;
+  const parentsCap = input.parentsSenior ? 50_000 : 25_000;
+  const c80C = Math.max(0, 150_000 - Math.max(0, input.deductions80C));
+  const nps = Math.max(0, 50_000 - Math.max(0, input.nps80CCD1B));
+  const d80D =
+    Math.max(0, selfCap - Math.max(0, input.healthInsuranceSelf)) +
+    Math.max(0, parentsCap - Math.max(0, input.healthInsuranceParents));
+
+  const filled: TaxInput = {
+    ...input,
+    deductions80C: 150_000,
+    nps80CCD1B: 50_000,
+    healthInsuranceSelf: selfCap,
+    healthInsuranceParents: parentsCap,
+  };
+  const taxSaved = Math.max(
+    0,
+    computeOldRegime(input).totalTaxPayable - computeOldRegime(filled).totalTaxPayable,
+  );
+  return { c80C, nps, d80D, taxSaved };
+}

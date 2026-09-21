@@ -6,6 +6,7 @@ import { SliderField } from "@/components/calculator/SliderField";
 import { ResultRow, HeroFigure, SplitBar } from "@/components/calculator/ResultRow";
 import { TimePlot } from "@/components/calculator/TimePlot";
 import { ScheduleTable } from "@/components/calculator/ScheduleTable";
+import { TipCard } from "@/components/calculator/TipCard";
 import { ExportBar } from "@/components/calculator/ExportBar";
 import { Callout } from "@/components/calculator/Callout";
 import { Reveal } from "@/components/ui/Reveal";
@@ -381,6 +382,13 @@ export function EmiCalculatorPage() {
               </div>
             </div>
           )}
+
+          <TipCard title="Prepay, or step up your EMI?" href="/learn/prepay-loan-or-invest/" linkLabel="Prepay a loan or invest the money?">
+
+            <p>Paying a bit extra early cuts the most interest, because early instalments are mostly interest. Step-up EMI does something similar by raising your payment as your income grows. Whether to prepay or invest the money instead is a personal trade-off.</p>
+
+          </TipCard>
+
 
           <ExportBar
             getShareUrl={shareUrl}

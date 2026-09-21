@@ -5,12 +5,14 @@ import { CalculatorShell } from "@/components/calculator/CalculatorShell";
 import { CompactField } from "@/components/calculator/CompactField";
 import { RegimeColumn } from "@/components/calculator/RegimeColumn";
 import { Callout } from "@/components/calculator/Callout";
+import { ResultRow } from "@/components/calculator/ResultRow";
+import { TipCard } from "@/components/calculator/TipCard";
 import { ExportBar } from "@/components/calculator/ExportBar";
 import { Reveal } from "@/components/ui/Reveal";
 import { SegmentedControl, Toggle, Zone } from "@/components/ui/primitives";
 import { useCalculatorState } from "@/hooks/useCalculatorState";
 import type { Schema } from "@/lib/urlState";
-import { compareTaxRegimes, type AgeBand, type CityType, type RegimeResult, type TaxInput } from "@/lib/tax";
+import { compareTaxRegimes, deductionHeadroom, type AgeBand, type CityType, type RegimeResult, type TaxInput } from "@/lib/tax";
 import { formatINR } from "@/lib/format";
 
 const schema = {
@@ -91,6 +93,7 @@ export function IncomeTaxPage() {
   );
 
   const comparison = useMemo(() => compareTaxRegimes(input), [input]);
+  const headroom = useMemo(() => deductionHeadroom(input), [input]);
   const recommendedLabel = comparison.recommended === "old" ? "Old regime" : "New regime";
 
   const excel = async () => {
@@ -349,6 +352,32 @@ export function IncomeTaxPage() {
               highlight={comparison.recommended === "new"}
             />
           </div>
+
+          {input.grossSalary > 0 && (headroom.c80C + headroom.nps + headroom.d80D > 0) && (
+            <TipCard
+              title="Room left under old-regime limits"
+              href="/learn/section-80c-explained/"
+              linkLabel="How 80C works and what to weigh"
+            >
+              <div>
+                <ResultRow label="Section 80C (limit ₹1.5L)" value={formatINR(headroom.c80C)} />
+                <ResultRow label="NPS 80CCD(1B) (limit ₹50k)" value={formatINR(headroom.nps)} />
+                <ResultRow label="Health insurance 80D" value={formatINR(headroom.d80D)} />
+              </div>
+              {headroom.taxSaved > 0 ? (
+                <p>
+                  Using all of it would lower your old-regime tax by about{" "}
+                  <span className="font-semibold text-ink">{formatINR(headroom.taxSaved)}</span> a year.
+                  {comparison.recommended === "new"
+                    ? " The new regime still comes out lower for you today, so this only matters if it changes that."
+                    : ""}{" "}
+                  That saving has to be weighed against lock-ins and your own goals.
+                </p>
+              ) : (
+                <p>At your income these deductions would not change your old-regime tax.</p>
+              )}
+            </TipCard>
+          )}
 
           <ExportBar getShareUrl={shareUrl} onExcel={excel} onPdf={pdf} onReset={reset} />
         </Reveal>

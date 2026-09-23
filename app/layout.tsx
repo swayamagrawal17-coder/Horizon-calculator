@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { Header } from "@/components/layout/Header";
 import { RandomLetterSwap } from "@/components/ui/RandomLetterSwap";
+import { LAST_UPDATED_ISO } from "@/lib/buildInfo";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -49,6 +50,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const lastUpdated = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(LAST_UPDATED_ISO));
+
   return (
     <html lang="en" suppressHydrationWarning className={sans.variable}>
       <body className="min-h-screen antialiased">
@@ -88,6 +95,10 @@ export default function RootLayout({
                   >
                     <RandomLetterSwap label="Swayam Agrawal" />
                   </a>
+                  <span className="mx-2 text-rule-strong">·</span>
+                  <time dateTime={LAST_UPDATED_ISO} className="tnum">
+                    Updated {lastUpdated}
+                  </time>
                 </p>
               </div>
             </footer>

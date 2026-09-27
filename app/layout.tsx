@@ -21,17 +21,17 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://horizon-calc.verce
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Horizon — EMI, Future Value, Present Value, Compare & Income Tax",
+    default: "Horizon — EMI, Future Value, Present Value, Compare, Income Tax & Cost Sheet",
     template: "%s — Horizon",
   },
   description:
-    "The time value of money over its full horizon: loan EMI and step-up EMI, future value and present value, side-by-side comparisons, and India income tax — drawn as balance-over-time plots with amortization schedules.",
+    "The time value of money over its full horizon: loan EMI and step-up EMI, future value and present value, side-by-side comparisons, India income tax, and a cost sheet with break-even and standard-costing variance analysis.",
   authors: [{ name: "Swayam Agrawal", url: "https://swayam-agrawal.vercel.app" }],
   creator: "Swayam Agrawal",
   openGraph: {
     siteName: "Horizon",
     type: "website",
-    title: "Horizon — EMI, Future Value, Present Value, Compare & Income Tax",
+    title: "Horizon — EMI, Future Value, Present Value, Compare, Income Tax & Cost Sheet",
     description:
       "The time value of money over its full horizon, drawn as balance-over-time plots with amortization schedules.",
   },

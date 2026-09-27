@@ -20,6 +20,7 @@ const tabs = [
   { href: "/present-value", label: "Present value" },
   { href: "/compare", label: "Compare" },
   { href: "/income-tax", label: "Income tax" },
+  { href: "/cost-sheet", label: "Cost sheet" },
   { href: "/learn", label: "Learn" },
 ];
 

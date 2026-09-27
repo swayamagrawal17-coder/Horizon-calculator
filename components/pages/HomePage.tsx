@@ -38,6 +38,13 @@ const entries = [
       "Old regime versus new regime, worked out side by side so you can see which pays less.",
   },
   {
+    href: "/cost-sheet",
+    eyebrow: "Costing · standard variance",
+    title: "Cost sheet & break-even",
+    description:
+      "Material, labour and overheads in — a live break-even chart and variance analysis out. Compare up to four products.",
+  },
+  {
     href: "/learn",
     eyebrow: "Guides · education only",
     title: "Learn",
@@ -52,7 +59,7 @@ export function HomePage() {
       <header className="relative max-w-2xl">
         <HorizonMark />
         <h1 className="text-3xl leading-tight tracking-tight sm:text-[2.6rem]">
-          Five worksheets for the time value of money
+          Six calculators for the numbers that matter
         </h1>
         <p className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-ink-2">
           Pick a calculator below. Every figure updates live, every page can be

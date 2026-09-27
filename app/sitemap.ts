@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/present-value/",
     "/compare/",
     "/income-tax/",
+    "/cost-sheet/",
     "/learn/",
     ...articles.map((a) => `/learn/${a.slug}/`),
     "/disclaimer/",
